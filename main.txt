@@ -1,0 +1,247 @@
+BEGIN
+    load in r6 address of scope stack
+    go to MAIN_MSG
+
+MAIN_MSG
+    show first message
+    go to MAIN
+
+MAIN:
+    INPUT: make user input N
+    CHECK_N: check N is within range, 15 <= N <= 30
+    if N within range
+        save N inserted by user
+        INPUT_N_DONE: prepare for the numbers inputs
+            show message to eneter numb
+            go to ENTER_NUM
+
+INPUT:
+    push r7 to stack scope
+    
+    INPUT_NO_PUSH:
+            show message to user to enter value
+            clear r2,r4
+            INPUT_I:
+                get char
+                if it was enter
+                    YES_ENTER:
+                        if '-' flag is on
+                            complement input value
+                        else 
+                            INPUT_READY:
+                                pop r7 to go back
+                                return
+                else
+                    echo char
+                    if it was a '-'
+                        NEGATIVE: negate '-' flag
+                    else
+                        if it was a number
+                            convert from ascii to number
+                            ACCUM: accumulate
+                                acumm <- 10*accum + number
+                                if overflow in accum:
+                                    OVERFLOW:
+                                        show error message
+                                        go to INPUT_NO_PUSH
+                                if overflow for comparison:
+                                    OVERFLOW_BUBBLE:
+                                        show error message
+                                        go to INPUT_NO_PUSH
+                                else
+                                    go to INPUT_I
+
+CHECK_N:
+    push r7 to scope stack
+    if N < N_LOW OR N > N_HIGH:
+        NOT_IN_RANGE:
+            show error message
+            go to MAIN
+    else
+    pop r7 from scope stack
+    return
+
+ENTER_NUM:
+    load N from memory
+    load address of data array
+    ENTER_NUM_LOOP:
+        for i = N to 0
+            go to INPUT
+            push received data into data array
+            i--
+        NUM_DONE:
+            show message to user
+            go to MENU
+
+MENU:
+    show MENU
+    show enter message
+    go to INPUT
+    switch based on received value:
+        1 : go to MAIN_MSG
+        2 : go to HIGH_VAL
+        3 : go to SORT_OPT
+        4 : go to MUL_4
+        5 : go to EXIT
+        default: go to WHAT
+            WHAT:
+                show error message
+                go to MENU
+
+EXIT:
+    halt
+
+HIGH_VAL:
+    show message
+    go to SORT: sort data array descending
+    show only first element:
+        pass number of data to show = 1
+        go to SHOW_PREP
+        go to MENU
+
+SORT_OPT:
+    show message
+    go to SORT
+    pass number of data to show = N
+    go to SHOW_PREP
+    go to MENU
+
+SORT:
+    load N from memory
+    load data array address
+    for i : N - 1 to 0
+        for j : 0 to i
+            if DATA[j] < DATA[j+1]
+                swap values
+            j++
+    i--
+    go to SORTED: return
+
+SHOW_PREP
+    push r7 to scope stack
+    load number of data to show
+    load address of origin of data array
+    go to SHOW_LOOP:
+        for i : 1 to N
+            print space
+            load data[i] from array
+            display the data: DISPD
+    SHOW_END:
+        pop r7 from scope stack
+        return
+
+MUL_4:
+    show message to user
+    load data array address
+    MUL_4_LOOP:
+        for i: 1 to N:
+            mask data[i] with x0003
+            if it is x0000:
+                go to IS_MUL:
+                    display the data: DISPD
+            i++
+    go to MUL_4_done:
+        MUL_4_DONE: go to MENU
+
+DISPD:
+    load data we are asked to display
+    if data is zero
+        save r7
+        display 0
+        load to r7
+        return
+    else
+        go to DISPD_NON_ZERO:
+            store all registers in aux memory
+            if number is negative:
+                complement number to make it positive
+                display '-'
+            pow_10 = 1
+            num_pow = 0;
+            DISPD_LOOP_ASC: discover the highest power of 10 of the number
+                while(number/pow_10 >= 10):
+                    pow_10 <- pow_10 * 10
+                    num_pow++
+            DISPD_LOOP_DESC: #isolate digit, print it and substract its weigth from number
+                while(num_pow >=0)
+                    digit = number/pow_10
+                    number = number - digit*pow_10
+                    convert digit to ascii
+                    display digit
+                    pow_10 = pow_10/10
+                    num_pow--
+            DISPD_END:
+                load saved registers
+                return
+
+
+MUL:
+    store used registers
+    flag_negative = false
+    accum = 0
+    if (A is negative):
+        complement A; 
+        flag_negative = !flag_negative
+    if (B is negative):
+        complement B;
+        flag_negative = !flag_negative
+    MUL_LOOP:
+        for i: 1 to B
+            accum = accum + A;
+    MUL_POST_LOOP:
+        if negative_flag:
+            complement accum
+    MUL_CLEANUP:
+        load saved registers
+        return accum
+
+DIV:
+    store used registers
+    negative_flag = false
+    quotient = 0
+    DIV_CHECK_NEG_1: 
+        if (A is negative):
+            complement A; 
+            flag_negative = !
+            accum = A (already complemented)
+    if (B is negative):
+        complement B;
+        flag_negative = !flag_negative
+    DIV_POST_CHECK_NEG: complement divisor for repeated substraction
+        s = complement of B 
+    DIV_LOOP:
+        accum = accum - B = accum + s
+        if accum is negative:
+            go to DIV_CLEANUP:
+                if (flag_negative):
+                    complement result
+                load saved registers
+                set condition codes of result=quotient
+                return
+        else:
+            quotient++
+            go to DIV_LOOP
+
+PUSH_R1_SCOPE:
+    increase scope stack pointer
+    store in that addres the data
+    return
+
+POP_R1_SCOPE:
+    load data in memory pointed by scope stack pointer
+    decrease scope stack pointer
+    return
+
+PUSH_R1_DATA:
+    increase data stack pointer
+    store in that address the data
+    return
+
+POP_R1_DATA: (NOT USED ACTUALLY,WE ALWAYS START FROM THE BEGINNING)
+    load data in memory pointed by data stack pointer
+    decrease data stack pointer
+
+NEGATE_R1
+    negate r1 bitwise
+    sum 1
+    return
