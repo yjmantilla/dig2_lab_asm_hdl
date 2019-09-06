@@ -1,9 +1,13 @@
 		.orig x3000
-MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Higher value\n3 Lowest Value\n4 Desc.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt\n\nEnter op."
-BEGIN		br MAIN_MSG
-
+MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt\n\nEnter op."
 MSG_ENTER_N	.stringz "\n\nFirst enter N"
 MSG_ENTER_NUM	.stringz "\n\nEnter nums"
+MSG_N_OK .stringz "\nN ok!"
+MSG_WHAT .stringz "\nWrong Input!"
+MSG_HIGH .stringz "\nHIGHEST:\n"
+MSG_LOW .stringz "\nLOWEST:\n"
+
+BEGIN		br MAIN_MSG
 
 MAIN_MSG	lea r0 , MSG_ENTER_N
 		puts
@@ -17,7 +21,7 @@ INPUT_N_DONE	lea r0 , MSG_N_OK
 		lea r0, MSG_ENTER_NUM
 		puts
 		br ENTER_NUM
-		MSG_N_OK .stringz "\nN ok!"
+
 MENU		lea r0 , MSG_MENU	;Shows menu and ask for option
 		puts
 		jsr INPUT	; r4 now has option
@@ -34,19 +38,18 @@ MENU		lea r0 , MSG_MENU	;Shows menu and ask for option
 		add r1 , r4 , #-5
 		brz ASC_SORT
 		add r1 , r4 , #-6
-		brz MUL_4
+		brz MUL_248
 		; else invalid option
 		br WHAT	
 WHAT		lea r0 , MSG_WHAT
 		puts
-		MSG_WHAT .stringz "\nWrong Input!"
 		br MENU	
 
 
 EXIT		halt	; end program
 HIGH_VAL	lea r0 MSG_HIGH
 		puts
-		MSG_HIGH .stringz "\nHIGH VAL:\n"
+		
 		jsr SORT
 		;show only first pos
 
@@ -63,7 +66,6 @@ HIGH_VAL	lea r0 MSG_HIGH
 
 LOW_VAL		lea r0 MSG_LOW
 		puts
-		MSG_LOW .stringz "\nLOW VAL:\n"
 		jsr SORT
 		;show only first pos
 		; set next operator
@@ -173,7 +175,7 @@ SHOW_PREP	; Needs r3 with address of data array
 		st r7, SHOW_R7		
 		;lea r3 , DATA_STORE		; r3 <- address of data 
 		;add r3 , r3 , #1
-SHOW_LOOP	lea r0 , MSG_SPACE
+SHOW_LOOP	lea r0 , MSG_SEP
 		puts
 		add r4, r4, #-1		
 		brn SHOW_END	
@@ -186,33 +188,84 @@ SHOW_LOOP	lea r0 , MSG_SPACE
 SHOW_END ld r7, SHOW_R7
 		ret		
 SHOW_R7 .FILL 0
+MSG_2 .stringz "\n2:"
+MSG_4 .stringz "\n4:"
+MSG_8 .stringz "\n8:"
 
-MUL_4		lea r0 , MSG_MUL4
+MUL_248
+		
+		lea r0 , MSG_MUL
 		puts
-		lea r5 DATA_STORE
+		
+		; for 2
+		lea r0 , MSG_2
+		puts
+		;set mask in r6
+		and r6,r6,#0
+		add r6,r6,x0001
+		jsr MULTIPLE_PREP
+
+		; for 4
+		lea r0 , MSG_4
+		puts
+		;set mask in r6
+		and r6,r6,#0
+		add r6,r6,x0003
+		jsr MULTIPLE_PREP
+
+		; for 8
+		lea r0 , MSG_8
+		puts
+		;set mask in r6
+		and r6,r6,#0
+		add r6,r6,x0007
+		jsr MULTIPLE_PREP
+		br MENU
+		
+MULTIPLE_PREP	st r0 , M_R0		
+		st r1 , M_R1
+		st r3 , M_R3
+		st r4 , M_R4
+		st r5 , M_R5
+		st r6 , M_R6
+		st r7 , M_R7
+		lea r5 DATA_STORE		; where is the data
 		add r5 , r5 , #1
 		and r3 , r3 , #0		; will be a counter
-		ld  r1 , N_STORE
+		ld  r1 , N_STORE		
 		jsr NEGATE_R1
-		add r4 , r1 , 0
-MUL_4_LOOP	ldr r1 , r5 , #0
-		add r5 , r5 , #1
-		; multiples of 4 finish in 00		
-		and r0 , r1 , x0003	; mask with last 2 bits
-		brz IS_MUL
-CONT_M4		add r3 , r3 , #1
-		add r0 , r3 , r4
-		brz MUL_4_DONE
-		br MUL_4_LOOP
+		add r4 , r1 , 0			;
 		
-IS_MUL		lea r0 , MSG_SPACE
+MULTIPLE_LOOP	ldr r1 , r5 , #0
+		add r5 , r5 , #1	
+		and r0 , r1 , r6	; mask
+		brz IS_MUL
+CONT_M		add r3 , r3 , #1
+		add r0 , r3 , r4
+		brz MUL_DONE
+		br MULTIPLE_LOOP
+		
+IS_MUL		lea r0 , MSG_SEP
 		puts
 		add r0 , r1 , #0
 		jsr DISPD
-		br CONT_M4
-MUL_4_DONE	br MENU
-MSG_SPACE .stringz " "
-
+		br CONT_M
+MUL_DONE	ld r0 , M_R0		
+		ld r1 , M_R1
+		ld r3 , M_R3
+		ld r4 , M_R4
+		ld r5 , M_R5
+		ld r6 , M_R6
+		ld r7 , M_R7
+		ret
+MSG_SEP .stringz " "
+M_R1 .FILL 0
+M_R5 .FILL 0
+M_R6 .FILL 0
+M_R3 .FILL 0
+M_R0 .FILL 0
+M_R4 .FILL 0
+M_R7 .FILL 0
 NOT_IN_RANGE	lea r0 , MSG_ERROR_N
 		puts
 		br MAIN
@@ -233,7 +286,7 @@ ENTER_NUM_LOOP	add r3 , r3 , #-1
 		br ENTER_NUM_LOOP			
 		
 DATA_STORE 	.blkw #31 ; because push pushes in the next
-MSG_MUL4 .stringz "\n MUL4: \n"	
+MSG_MUL .stringz "\nMULTS: \n"	
 MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
 N_LOW		.fill #15 ;15
 N_HIGH		.fill #30 ;30
