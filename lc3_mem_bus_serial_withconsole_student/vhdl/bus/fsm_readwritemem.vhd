@@ -2,7 +2,7 @@
 -- LC3 Processor
 -- Digital Electronics Lab Course
 -- 2019
--- Module: Programming/Communication module for LC3 through UART
+-- Module: Read/Write Memory module for LC3 through UART
 -- ***************************************************************************************
 
 library IEEE;
@@ -11,7 +11,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use ieee.numeric_std.all;
 
-entity programming_communication is
+entity fsm_readwritemem is
 Generic(   
 			ADDR_LC3_WIDTH	 : natural := 16;
 			DATA_LC3_WIDTH  : natural := 16);
@@ -34,15 +34,15 @@ port (
 			data_RM			 : in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Read Data
 			MemOpDone		 : in  std_logic;	-- Operation completed
 			-- Signals from/to LC3
-			StartLC3			 : out std_logic	-- Start LC3
+			LC3Started		 : out std_logic	-- LC3 was started
 		);
-end programming_communication;
+end fsm_readwritemem;
 
-architecture Behavioral of programming_communication is
--- FSM for the Protocolo
-type fsm_states is (state_tx1, state_tx2, 
+architecture Behavioral of fsm_readwritemem is
+-- FSM for the Protocol
+type fsm_states is (state_tx1, state_tx2, state_tx3, 
                     s1, s2, s3, s4, s5, s6, 
-						  s_write0, s_write1, s_write2, s_write3, s_write4, 
+						  s_write0, s_write1, s_write2, s_write3, s_write4, s_write5,
 						  s_read0, s_read1, s_read2, s_read3, s_read4, 
 						  s_lc3);
 signal protocol_state, protocol_state_aftertx: fsm_states := s1;	
@@ -66,26 +66,34 @@ process(RST, CLK)
 			protocol_state_aftertx <= s1;
 			Data_Tx <= x"00";
 			ChrReadyToPC <= '0';
+			Rx_Ack <= '0';
 			Start_write <= '0';
 			Start_read <= '0';
-			Rx_Ack <= '0';
-			StartLC3 <= '0';	
+			LC3Started <= '0';	
 			LEDS <= x"00";
 		elsif rising_edge (CLK) then
 			-- Always do the following (a particular case might override them)
 			Rx_Ack <= '0';
+			LC3Started <= '0';
+			
 			-- Process the current state
 			case protocol_state is
 				when state_tx1 =>							-- Send answer to PC
 					ChrReadyToPC <= '1';
 					protocol_state <= state_tx2;
 				when state_tx2 =>
-					ChrReadyToPC <= '0';
 					if Tx_Ack = '1' then 				-- Data sent through UART
-						protocol_state <= protocol_state_aftertx;	
 						Rx_Ack <= '1';
+						ChrReadyToPC <= '0';				-- UART waits for it to restart tx
+						protocol_state <= state_tx3;
 					else
 						protocol_state <= state_tx2;
+					end if;	
+				when state_tx3 =>
+					if ChrReadyFromPC = '0' then 			-- UART has cleaned it
+						protocol_state <= protocol_state_aftertx;	
+					else
+						protocol_state <= state_tx3;
 					end if;	
 				-- Start receiving chrs to get ready for writing/reading memory
 				-- FPGA and PC must have the same baud configuration. 
@@ -100,7 +108,7 @@ process(RST, CLK)
 							Data_Tx <= x"ff";
 							protocol_state_aftertx <= s1;
 						end if;
-						protocol_state <= state_tx1;
+						protocol_state <= state_tx1;	-- Transmission sends Rx Ack
 					else
 						protocol_state <= s1;
 					end if;	
@@ -110,10 +118,9 @@ process(RST, CLK)
 						if (Data_Rx < x"02") then -- Check R/W command
 							Data_Tx <= x"02";		  -- Ack command accepted
 							command <= Data_Rx;
-							StartLC3 <= '0';		  -- Allows communication again
 							protocol_state_aftertx <= s3;
 						elsif (Data_Rx = x"53") then -- Start LC3 using 'S'
-							Data_Tx <= x"c0";
+							Data_Tx <= x"00";
 							protocol_state_aftertx <= s_lc3;
 						else
 							Data_Tx <= x"ff";
@@ -178,33 +185,43 @@ process(RST, CLK)
 					end if;
 				when s_write1 =>
 					LEDS <= x"a1";
-					Rx_Ack <= '0';
-					if (ChrReadyFromPC = '1') then -- Gets lower byte
-						start_write <= '1';			 -- Request memory writing for current word
+					if (ChrReadyFromPC = '0') then -- Waits until UART withdraw the request
 						protocol_state <= s_write2;
-						sdata(DATA_LC3_WIDTH-9 downto DATA_LC3_WIDTH-16) <= Data_Rx;
-					else 	
+					else
 						protocol_state <= s_write1;
 					end if;
 				when s_write2 =>
 					LEDS <= x"a2";
+					if (ChrReadyFromPC = '1') then -- Gets lower byte
+						start_write <= '1';			 -- Request memory writing for current word
+						protocol_state <= s_write3;
+						sdata(DATA_LC3_WIDTH-9 downto DATA_LC3_WIDTH-16) <= Data_Rx;
+					else 	
+						protocol_state <= s_write2;
+					end if;
+				when s_write3=>
+					LEDS <= x"a3";
 					start_write <= '0';
 					if MemOpDone = '1' then			-- Wait for memory to finish
-						protocol_state <= s_write3;
+						protocol_state <= s_write4;
 						size <= size - 1;
 						Rx_Ack <= '1';					-- Ack for second byte when memory is written
 					else 	
-						protocol_state <= s_write2;
+						protocol_state <= s_write3;
 					end if;	
-				when s_write3 =>	
+				when s_write4 =>	
 					LEDS <= x"a3";
-					if size = (size'range => '0')  then	-- Done?
-						protocol_state <= s_write4;
+					if (ChrReadyFromPC = '0') then -- Waits until UART withdraw the request
+						if size = (size'range => '0')  then	-- Done?
+							protocol_state <= s_write5;
+						else
+							protocol_state <= s_write0;
+							address <= address + 1;		-- Next address
+						end if;	
 					else
-						protocol_state <= s_write0;
-						address <= address + 1;		-- Next address
-					end if;	
-				when s_write4 =>
+						protocol_state <= s_write4;
+					end if;
+				when s_write5 =>
 					LEDS <= x"a4";
 					if (ChrReadyFromPC = '1') then 						
 						if Data_Rx = x"fa" then	-- Should be STOP command
@@ -215,7 +232,7 @@ process(RST, CLK)
 						protocol_state <= state_tx1;
 						protocol_state_aftertx <= s1;
 					else
-						protocol_state <= s_write4;
+						protocol_state <= s_write5;
 					end if;
 				when s_read0 =>
 					LEDS <= x"b0";
@@ -262,8 +279,9 @@ process(RST, CLK)
 						protocol_state <= s_read1;
 					end if;	
 				when s_lc3 =>
-					StartLC3 <= '1';
-					protocol_state <= s1;
+					LEDS <= x"F0";
+					LC3Started <= '1';
+					protocol_state <= s_lc3;				-- Protocol disabled, console enabled (Peripheral)
 			end case;
 		end if;
 end process;
@@ -271,35 +289,38 @@ end process;
 -- Memory FSM
 AddrM <= address;
 process(RST, CLK)
-	begin
-		if RST = '1' then
-			mem_state <= m0;
-			start_RW <= '0';
-		elsif rising_edge (CLK) then
-			case mem_state is
-				when m0 =>
-					if start_write = '1' then
-						mem_state <= m1;
-						R_W <= '1';
-						start_RW <= '1';
-					elsif start_read = '1' then
-						mem_state <= m1;
-						R_W <= '0';
-						start_RW <= '1';
-					else
-						mem_state <= m0;
-						start_RW <= '0';
-					end if;
-				when m1 =>
-					start_RW<='0';
-					if MemOpDone='1' then
-						mem_state <= m0;
-					else	
-						mem_state <= m1;
-					end if;
-			end case;
-		end if;
-end process;		
+begin
+	if RST = '1' then
+		mem_state <= m0;
+		start_RW <= '0';
+	elsif rising_edge (CLK) then
+		case mem_state is
+			when m0 =>
+				if start_write = '1' then
+					mem_state <= m1;
+					R_W <= '1';
+					start_RW <= '1';
+				elsif start_read = '1' then
+					mem_state <= m1;
+					R_W <= '0';
+					start_RW <= '1';
+				else
+					mem_state <= m0;
+					start_RW <= '0';
+				end if;
+			when m1 =>
+				start_RW<='0';
+				if MemOpDone='1' then
+					mem_state <= m0;
+				else	
+					mem_state <= m1;
+				end if;
+		end case;
+	end if;
+end process;	
+
+-- Peripheral process
+	
 
 end Behavioral;
 

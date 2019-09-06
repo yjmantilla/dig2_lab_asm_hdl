@@ -23,7 +23,7 @@ port (
 			MEM			: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
 			R		   	: out std_logic;
 			-- Memory FSM Interface
-			StartLC3		: in  std_logic;
+			LC3Started	: in  std_logic;
 			start_RW_M	: out std_logic;
 			R_W_Mem		: out std_logic;
 			AddrM			: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	-- Memory Address
@@ -67,7 +67,7 @@ begin
 				
 				memper_operation <= '0';
 				lc3_state <= lc3_init;
-			elsif (CLK = '1' and CLK'Event) then
+			elsif (rising_edge(CLK)) then
 				-- Do the following always (a particular case can override them)
 				R <= '0';					
 				start_RW_M <= '0';
@@ -75,7 +75,7 @@ begin
 
 				case lc3_state is	
 					when lc3_init =>
-						if (StartLC3 = '1') then
+						if (LC3Started = '1') then
 							lc3_state <= lc3_memen;
 						else
 							lc3_state <= lc3_init;

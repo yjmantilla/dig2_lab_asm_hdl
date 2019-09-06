@@ -1,0 +1,13 @@
+1 completar codigo en ensamblador completamente funcional
+2 completar funciones trap con hacking o con los comentarios ayuda
+3 ensamblamos el codigo a hexadecimal
+
+
+console echo wcmd
+
+
+cuteCom
+
+pasar el ensamblador a la direccion 0
+
+probar primero el echo del serial

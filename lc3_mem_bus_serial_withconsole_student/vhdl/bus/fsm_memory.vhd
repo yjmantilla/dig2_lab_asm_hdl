@@ -14,7 +14,7 @@ Generic(
 Port ( 	
 			CLK		 : in  std_logic;
 			RST		 : in  std_logic;
-			-- Signals from/to programming/communication module
+			-- Signals from/to ReadWriteMEM module
 			start_RW	 : in  std_logic;								-- Start a memory operation
 			R_W		 : in  std_logic;								-- Read (0), Write (1)
 			AddrM  	 : in  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	-- Mem Addr

@@ -18,7 +18,6 @@ Port (
 			CLK		: in std_logic;
 			RST		: in std_logic;
 			LEDS		: out std_logic_vector(7 downto 0);
-			SWITCHES	: in std_logic_vector(7 downto 0);
 			-- Signals from/to PC
 			TXD		: out std_logic; 	-- Serial transmission
 		 	RXD		: in std_logic;	-- Serial reception
@@ -39,7 +38,6 @@ Port (
 	 ATTRIBUTE LOC: string;
 	 ATTRIBUTE LOC OF CLK    : SIGNAL IS "B8"; 	-- system clock 50 MHz (Nexys2)
 	 ATTRIBUTE LOC OF RST  	 : SIGNAL IS "H13";  -- BTN3
-	 ATTRIBUTE LOC OF SWITCHES : SIGNAL IS "R17,N17,L13,L14,K17,K18,H18,G18";
 	 ATTRIBUTE LOC OF LEDS   : SIGNAL IS "R4,F4,P15,E17,K14,K15,J15,J14";
 	 ATTRIBUTE LOC OF TXD  	 : SIGNAL IS "P9"; 
 	 ATTRIBUTE LOC OF RXD  	 : SIGNAL IS "U6";  -- BTN3
@@ -57,23 +55,27 @@ Port (
 end TOP;
 
 architecture Behavioral of Top is
-	component peripheral_ctrl
+	component peripheral_uart
 		generic(   
-				ADDR_LC3_WIDTH  : natural;	
-				DATA_LC3_WIDTH  : natural);
+				ADDR_LC3_WIDTH : natural;	
+				DATA_LC3_WIDTH : natural);
 		port (
-				CLK			: in  std_logic;
-				RST			: in  std_logic;
-				-- Inputs
-				Switches		: in  std_logic_vector(3 downto 0);
-				LEDS			: out std_logic_vector(7 downto 0);
+				CLK				: in  std_logic;
+				RST				: in  std_logic;
+				-- Signals to/from SystemBus
+				ChrReadyFromPC : in  std_logic;						
+				Data_Rx			: in  std_logic_vector(7 downto 0);
+				Rx_Ack 			: out std_logic;
+				ChrReadyToPC	: out std_logic;								
+				Data_Tx			: out std_logic_vector (7 downto 0);		
+				Tx_Ack			: in std_logic;
 				-- Interface for the peripheral
-				start_RW_P	: in  std_logic;
-				R_W_Per		: in  std_logic;
-				AddrP			: in  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
-				data_WPer	: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- From LC3
-				data_RPer	: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
-				PerOpDone	: out std_logic
+				start_RW_P		: in  std_logic;
+				R_W_Per			: in  std_logic;
+				AddrP				: in  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
+				data_WPer		: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- From LC3
+				data_RPer		: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
+				PerOpDone		: out std_logic
 			);
 	end component;
 
@@ -96,14 +98,14 @@ architecture Behavioral of Top is
 
 	component systembus
 	Generic(   
-			ADDR_LC3_WIDTH  : natural := 16;	-- LC3
-			DATA_LC3_WIDTH  : natural := 16);-- LC3
+			ADDR_LC3_WIDTH  : natural;	
+			DATA_LC3_WIDTH  : natural);
 	Port ( 	-- General signals
 			CLK		: in  std_logic;
 			RST		: in  std_logic;
 			LEDS		: out std_logic_vector(7 downto 0);
 			
-			-- Signals from/to UART
+			-- Signals from/to UART Module
 			DATA_R	: in  std_logic;							-- Data ready coming from PC
 			DATA_OUT	: in  std_logic_vector(7 downto 0);	-- 8-bit data from PC
 			ACK_R		: out std_logic;							-- Data taken ack
@@ -111,7 +113,7 @@ architecture Behavioral of Top is
 			DATA_IN	: out std_logic_vector(7 downto 0);	-- 8-bit data to PC
 			ACK_W		: in  std_logic;							-- Data sent to PC successfully
 			
-			-- Signals from/to MEM
+			-- Signals from/to Memory Interface
 			Addr_ToM	: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0); -- Mem Address
 			Data_FrM : in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Data to read from MEM
 			Data_ToM : out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Data to write to MEM
@@ -119,7 +121,7 @@ architecture Behavioral of Top is
 			Op_Ack 	: in 	std_logic;							-- Operation ACK
 			Busyn 	: in  std_logic;							-- Memory busy
 			
-			 -- LC3 <--> MEM
+			 -- Signals from/to MEM LC3 Interface
 			MDR    	: in std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
 			MAR    	: in std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
 			R_W    	: in std_logic;
@@ -127,13 +129,19 @@ architecture Behavioral of Top is
 			MEM		: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
 			R		   : out std_logic;
 			
-			-- LC3 <--> PERIPHERAL
-			start_RW_P	: out std_logic;
-			R_W_Per		: out std_logic;
-			AddrP			: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
-			data_WPer 	: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
-			data_RPer	: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
-			PerOpDone	: in  std_logic
+			-- Signals from/to Peripheral
+			ChrReadyFromPC_per : out std_logic;						
+			Data_Rx_per			 : out std_logic_vector(7 downto 0);
+			Rx_Ack_per 			 : in  std_logic;
+			ChrReadyToPC_per	 : in  std_logic;								
+			Data_Tx_per			 : in  std_logic_vector (7 downto 0);		
+			Tx_Ack_per			 : out std_logic;
+			start_RW_P		: out std_logic;
+			R_W_Per			: out std_logic;
+			AddrP				: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
+			data_WPer 		: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
+			data_RPer		: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
+			PerOpDone		: in  std_logic
 		);
 	end component;
 
@@ -173,7 +181,7 @@ architecture Behavioral of Top is
 			DATA_BITS   : integer;
 			MEMORY_SIZE : integer);
 		port (
-			LEDS		   : out std_logic_vector(7 downto 0);
+			LEDS		  : out std_logic_vector(7 downto 0);
 			CLK        : in  std_logic;
 			Reset      : in  std_logic;
 			-- Interface LC3 -- External Memory
@@ -181,12 +189,27 @@ architecture Behavioral of Top is
 			MAR_out    : out std_logic_vector((DATA_BITS - 1) downto 0);
 			R_W_out    : out std_logic;
 			MEM_EN_out : out std_logic;
-			mem_input	: in std_logic_vector((DATA_BITS - 1) downto 0);
+			MEM_input  : in std_logic_vector((DATA_BITS - 1) downto 0);
 			R_input    : in std_logic
-			);
+		);
 	end component;
 
---Declaracion de seales
+-- Signal declaration
+	-- Peripheral <--> SystemBus
+	signal sChrReadyFromPC : std_logic;						
+	signal sData_Rx		  : std_logic_vector(7 downto 0);
+	signal sRx_Ack 		  : std_logic;
+	signal sChrReadyToPC	  : std_logic;								
+	signal sData_Tx		  : std_logic_vector (7 downto 0);		
+	signal sTx_Ack			  : std_logic;
+	signal sstart_RW_P	  : std_logic;	
+	signal sR_W_Per		  : std_logic;
+	signal sAddrP			  : std_logic_vector(DATA_WIDTH-1 downto 0);
+	signal sdata_WPer		  : std_logic_vector(DATA_WIDTH-1 downto 0);
+	signal sdata_RPer		  : std_logic_vector(DATA_WIDTH-1 downto 0);
+	signal sPerOpDone		  : std_logic;
+	
+	-- Serial <--> SystemBus
 	signal sDATA_R		:  std_logic;
 	signal sDATA_OUT	:  std_logic_vector(7 downto 0);
 	signal sACK_R		:  std_logic;
@@ -194,6 +217,7 @@ architecture Behavioral of Top is
 	signal sDATA_IN	:	std_logic_vector(7 downto 0) ;
 	signal sACK_W		:	std_logic ;
 	
+	-- Memory <--> SystemBus
 	signal sOp     	: 	std_logic_vector(1 downto 0);		
 	signal sAddr_ToM  : 	std_logic_vector(ADDR_FPGA_WIDTH-1 downto 0);	
 	signal sData_FrM	: 	std_logic_vector(DATA_WIDTH-1 downto 0);   
@@ -201,6 +225,7 @@ architecture Behavioral of Top is
 	signal sBusyn 		: 	std_logic;								
 	signal sOp_Ack 	: 	std_logic;								
 	
+	-- LC3 <--> SystemBus
 	signal sMDR    	:  std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal sMAR    	:  std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal sR_W    	:  std_logic;
@@ -208,23 +233,22 @@ architecture Behavioral of Top is
 	signal sMEM			:  std_logic_vector(DATA_WIDTH-1 downto 0);
 	signal sR	   	:  std_logic;
 	
-	signal sstart_RW_P: std_logic;	
-	signal sR_W_Per	: std_logic;
-	signal sAddrP		: std_logic_vector(DATA_WIDTH-1 downto 0);
-	signal sdata_WPer	: std_logic_vector(DATA_WIDTH-1 downto 0);
-	signal sdata_RPer	: std_logic_vector(DATA_WIDTH-1 downto 0);
-	signal sPerOpDone	: std_logic;
 begin
 
-Peripheral_m: peripheral_ctrl 
+PeripheralIO_m: peripheral_uart 
 	generic map(   
 		ADDR_LC3_WIDTH => ADDR_FPGA_WIDTH,	
 		DATA_LC3_WIDTH => DATA_WIDTH)
 	port map(
 		CLK => CLK,
 		RST => RST,
-		Switches => SWITCHES(3 downto 0),
-		LEDS => open,
+		
+		ChrReadyFromPC => sChrReadyFromPC,
+		Data_Rx        => sData_Rx,
+		Rx_Ack         => sRx_Ack,
+		ChrReadyToPC   => sChrReadyToPC,
+		Data_Tx        => sData_Tx,
+		Tx_Ack         => sTx_Ack,
 		
 		start_RW_P => sstart_RW_P,
 		R_W_Per 	  => sR_W_Per,
@@ -279,6 +303,12 @@ SystemBus_m: systembus
 		MEM	 	=> sMEM,
 		R	    	=> sR,
 		
+		ChrReadyFromPC_per => sChrReadyFromPC,
+		Data_Rx_per			 => sData_Rx,
+		Rx_Ack_per			 => sRx_Ack,
+		ChrReadyToPC_per	 => sChrReadyToPC,
+		Data_Tx_per			 => sData_Tx,
+		Tx_Ack_per			 => sTx_Ack,
 		start_RW_P => sstart_RW_P,
 		R_W_Per    => sR_W_Per,
 		AddrP      => sAddrP,
@@ -289,10 +319,10 @@ SystemBus_m: systembus
 			
 Memory_m: nexys2_mem_interface
 	Generic Map(   
-		ADDR_MEM_WIDTH => ADDR_MEM_WIDTH,
+		ADDR_MEM_WIDTH  => ADDR_MEM_WIDTH,
 		ADDR_FPGA_WIDTH => ADDR_FPGA_WIDTH,
-		DATA_WIDTH => DATA_WIDTH,
-		CYCLES_WAITING => CYCLES_WAITING)
+		DATA_WIDTH      => DATA_WIDTH,
+		CYCLES_WAITING  => CYCLES_WAITING)
 	Port Map(         
 		CLK 	=> CLK,
 		RESET => RST,

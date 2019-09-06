@@ -45,12 +45,18 @@ Port ( 	-- General signals
 			R		   : out std_logic;
 			
 			-- LC3 <--> PERIPHERAL
-			start_RW_P	: out std_logic;
-			R_W_Per		: out std_logic;
-			AddrP			: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
-			data_WPer 	: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
-			data_RPer	: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
-			PerOpDone	: in  std_logic
+			ChrReadyFromPC_per : out std_logic;						
+			Data_Rx_per			 : out std_logic_vector(7 downto 0);
+			Rx_Ack_per 			 : in  std_logic;
+			ChrReadyToPC_per	 : in  std_logic;								
+			Data_Tx_per			 : in  std_logic_vector (7 downto 0);		
+			Tx_Ack_per			 : out std_logic;
+			start_RW_P		: out std_logic;
+			R_W_Per			: out std_logic;
+			AddrP				: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);
+			data_WPer 		: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
+			data_RPer		: in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
+			PerOpDone		: in  std_logic
 		);
 end systembus;
 
@@ -66,7 +72,7 @@ Port ( 	CLK		: in std_logic;
 			DATA_W	: out std_logic ;								
 			DATA_IN	: out std_logic_vector(7 downto 0);		
 			ACK_W		: in std_logic; 								
-			-- Signals used by the protocol module
+			-- Signals used by the read/write mem and peripheral modules
 			ChrReadyFromPC : out std_logic;						
 			Data_Rx			: out std_logic_vector(7 downto 0);
 			Rx_Ack			: in  std_logic;
@@ -76,7 +82,7 @@ Port ( 	CLK		: in std_logic;
 		);		
 end component;
 
-component programming_communication
+component fsm_readwritemem
 Generic(   
 			ADDR_LC3_WIDTH	 : natural := 16;
 			DATA_LC3_WIDTH  : natural := 16);
@@ -99,7 +105,7 @@ port (
 			data_RM			 : in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Read Data
 			MemOpDone		 : in  std_logic;	-- Operation completed
 			-- Signals from/to LC3
-			StartLC3			 : out std_logic	-- Start LC3
+			LC3Started		 : out std_logic	-- Start LC3
 		);	
 end component;
 
@@ -110,13 +116,13 @@ Generic(
 Port ( 	
 			CLK		 : in std_logic;
 			RST		 : in std_logic;
-			-- Signals from/to programming/communication module
+			-- Signals from/to Read/Write MEM module
 			start_RW	 : in  std_logic;								-- Start a memory operation
 			R_W		 : in  std_logic;								-- Read (0), Write (1)
 			AddrM  	 : in  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	-- Mem Addr
 			data_WM	 : in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Write Data
 			data_RM	 : out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Read Data
-			MemOpDone : out std_logic;								--fin de la operacion
+			MemOpDone : out std_logic;								-- Mem completed operation
 			-- Signals from/to Memory Interface module
 			Addr_ToM	 : out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0); -- Mem Address
 			Data_FrM  : in  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	-- Data to read from MEM
@@ -142,7 +148,7 @@ port (
 			MEM			: out std_logic_vector(DATA_LC3_WIDTH-1 downto 0);
 			R		   	: out std_logic;
 			-- Memory FSM Interface
-			StartLC3		: in  std_logic;
+			LC3Started	: in  std_logic;
 			start_RW_M	: out std_logic;
 			R_W_Mem		: out std_logic;
 			AddrM			: out std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	-- Memory Address
@@ -159,32 +165,41 @@ port (
 		);
 end component;
 
---señales de conexion ente serial_fsm protocolo fsm_memoria
--- Signals to connect serial_fsm, programming/communication and fsm_memory modules
-signal sChrReadyFromPC	: std_logic;	
-signal sData_Rx			: std_logic_vector(7 downto 0);
-signal sRx_Ack				: std_logic;	
-signal sChrReadyToPC		: std_logic;	
-signal sData_Tx			: std_logic_vector(7 downto 0);	
-signal sTx_Ack				: std_logic;	
-					
+-- Signals to connect fsm_serial, fsm_memory, read/writemem and fsm_lc3_comp modules
+-- Serial
+signal sChrReadyFromPC_serial	: std_logic;	
+signal sData_Rx_serial			: std_logic_vector(7 downto 0);
+signal sRx_Ack_serial			: std_logic;	
+signal sChrReadyToPC_serial	: std_logic;	
+signal sData_Tx_serial			: std_logic_vector(7 downto 0);	
+signal sTx_Ack_serial			: std_logic;	
+		
+-- Read/Write Memory		
+signal sChrReadyFromPC_rwm	: std_logic;	
+signal sData_Rx_rwm			: std_logic_vector(7 downto 0);
+signal sRx_Ack_rwm			: std_logic;	
+signal sChrReadyToPC_rwm	: std_logic;	
+signal sData_Tx_rwm			: std_logic_vector(7 downto 0);	
+signal sTx_Ack_rwm			: std_logic;	
+signal sstart_RW_rwm			: std_logic;							
+signal sR_W_rwm				: std_logic;							
+signal sAddrM_rwm  			: std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	
+signal sdata_WM_rwm			: std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	
+
+-- Memory
 signal sstart_RW_end		:  std_logic;							
 signal sR_W_end	      :  std_logic;							
 signal sAddrM_end  		:  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	
 signal sdata_WM_end		:  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	
 signal sdata_RM_end		:  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	
 signal sMemOpDone_end	:  std_logic;								
-signal sStartLC3			:  std_logic;								
 
-signal sstart_RW_ProgC	:  std_logic;							
-signal sR_W_ProgC			:  std_logic;							
-signal sAddrM_ProgC  	:  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	
-signal sdata_WM_ProgC	:  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	
-
+-- LC3
 signal sstart_RW_lc3		:  std_logic;							
 signal sR_W_lc3			:  std_logic;							
 signal sAddrM_lc3  		:  std_logic_vector(ADDR_LC3_WIDTH-1 downto 0);	
 signal sdata_WM_lc3		:  std_logic_vector(DATA_LC3_WIDTH-1 downto 0);	
+signal sLC3Started		:  std_logic;								
 		
 begin
 
@@ -199,38 +214,38 @@ port map (
 			DATA_W	=> DATA_W,
 			DATA_IN	=> DATA_IN,
 			ACK_W		=> ACK_W,
-			-- Signals from/to programming_communication module
-			ChrReadyFromPC => sChrReadyFromPC,
-			Data_Rx			=> sData_Rx,
-			Rx_Ack         => sRx_Ack,
-			ChrReadyToPC   => sChrReadyToPC,
-			Data_Tx        => sData_Tx,
-			Tx_Ack         => sTx_Ack
+			-- Signals from/to MUX between Read/Write Mem and Peripheral modules
+			ChrReadyFromPC => sChrReadyFromPC_serial,
+			Data_Rx			=> sData_Rx_serial,
+			Rx_Ack         => sRx_Ack_serial,
+			ChrReadyToPC   => sChrReadyToPC_serial,
+			Data_Tx        => sData_Tx_serial,
+			Tx_Ack         => sTx_Ack_serial
 		);
 
-progcomm_comp: programming_communication
+readwritemem_comp: fsm_readwritemem
 generic map (ADDR_LC3_WIDTH => ADDR_LC3_WIDTH,
 				 DATA_LC3_WIDTH => DATA_LC3_WIDTH)
 port map(
 			CLK		=> CLK,
 			RST		=> RST,
 			LEDS     => LEDS,
-			-- Signals from/to programming_communication module
-			ChrReadyFromPC => sChrReadyFromPC,
-			Data_Rx			=> sData_Rx,
-			Rx_Ack         => sRx_Ack,
-			ChrReadyToPC   => sChrReadyToPC,
-			Data_Tx        => sData_Tx,
-			Tx_Ack         => sTx_Ack,
+			-- Signals from/to Read/Write Mem module
+			ChrReadyFromPC => sChrReadyFromPC_rwm,
+			Data_Rx			=> sData_Rx_rwm,
+			Rx_Ack         => sRx_Ack_rwm,
+			ChrReadyToPC   => sChrReadyToPC_rwm,
+			Data_Tx        => sData_Tx_rwm,
+			Tx_Ack         => sTx_Ack_rwm,
 			-- Signals from/to fsm_memory
-			start_RW	 => sstart_RW_ProgC,
-			R_W		 => sR_W_ProgC,
-			AddrM     => sAddrM_ProgC,
-			data_WM	 => sdata_WM_ProgC,
-			data_RM	 => sdata_RM_end,
-			MemOpDone => sMemOpDone_end,
-			-- Outputs to the mux
-			StartLC3  => sStartLC3
+			start_RW	 		=> sstart_RW_rwm,
+			R_W		 		=> sR_W_rwm,
+			AddrM     		=> sAddrM_rwm,
+			data_WM	 		=> sdata_WM_rwm,
+			data_RM	 		=> sdata_RM_end,
+			MemOpDone 		=> sMemOpDone_end,
+			-- Outputs to the mux (Memory + Peripheral)
+			LC3Started  	=> sLC3Started
 			);
 			
 fsm_memory_comp: fsm_memory
@@ -269,7 +284,7 @@ port map(
 			MEM		=> MEM,
 			R		   => R,
 			-- Memory Interface
-			StartLC3	  => sStartLC3,
+			LC3Started => sLC3Started,
 			start_RW_M => sstart_RW_lc3,
 			R_W_Mem	  => sR_W_lc3,
 			AddrM		  => sAddrM_lc3,
@@ -285,10 +300,34 @@ port map(
 			PerOpDone  => PerOpDone
 		);
 		
--- Signals through muxes
-sstart_RW_end <= sstart_RW_ProgC when sStartLC3 = '0' else sstart_RW_lc3;
-sR_W_end	     <= sR_W_ProgC		when sStartLC3 = '0' else sR_W_lc3;
-sAddrM_end 	  <= sAddrM_ProgC		when sStartLC3 = '0' else sAddrM_lc3;
-sdata_WM_end  <= sdata_WM_ProgC	when sStartLC3 = '0' else sdata_WM_lc3;
+-- Signals through muxes (Memory <--> Read/Write MEM / LC3)
+sstart_RW_end <= sstart_RW_rwm when sLC3Started = '0' 
+                 else sstart_RW_lc3;
+sR_W_end	     <= sR_W_rwm when sLC3Started = '0' 
+                 else sR_W_lc3;
+sAddrM_end 	  <= sAddrM_rwm when sLC3Started = '0' 
+                 else sAddrM_lc3;
+sdata_WM_end  <= sdata_WM_rwm when sLC3Started = '0' 
+                 else sdata_WM_lc3;
+
+-- Signals through muxes (Serial <--> Read/Write MEM / Peripheral)
+sChrReadyFromPC_rwm  <= sChrReadyFromPC_serial when sLC3Started = '0' 
+						 	   else '0';
+ChrReadyFromPC_per   <= sChrReadyFromPC_serial when sLC3Started = '1' 
+					 		   else '0';
+sData_Rx_rwm         <= sData_Rx_serial when sLC3Started = '0' 
+				 			   else (others => '0');
+Data_Rx_per          <= sData_Rx_serial when sLC3Started = '1' 
+							   else (others => '0');
+sRx_Ack_serial       <= sRx_Ack_rwm when sLC3Started = '0' 
+							   else Rx_Ack_per;
+sChrReadyToPC_serial <= sChrReadyToPC_rwm when sLC3Started = '0' 
+								else ChrReadyToPC_per;
+sData_Tx_serial      <= sData_Tx_rwm when sLC3Started = '0' 
+							   else Data_Tx_per;
+sTx_Ack_rwm          <= sTx_Ack_serial when sLC3Started = '0' 
+							   else '0';
+Tx_Ack_per           <= sTx_Ack_serial when sLC3Started = '1' 
+							   else '0';
 
 end Behavioral;

@@ -1,14 +1,9 @@
 		.orig x3000
-BEGIN		ld r6 , SCOPE_STACK		; load initial stack pointer
-		br MAIN_MSG
-
-SCOPE_STACK    	.fill x4000
-
-
+MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Higher value\n3 Lowest Value\n4 Desc.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt\n\nEnter op."
+BEGIN		br MAIN_MSG
 
 MSG_ENTER_N	.stringz "\n\nFirst enter N"
 MSG_ENTER_NUM	.stringz "\n\nEnter nums"
-
 
 MAIN_MSG	lea r0 , MSG_ENTER_N
 		puts
@@ -16,10 +11,7 @@ MAIN		jsr INPUT
 		jsr CHECK_N
 		st r4 , N_STORE
 		br INPUT_N_DONE
-NUM_DONE	lea r0 , MSG_NUM_OK
-		puts	
-		br MENU
-		MSG_NUM_OK .stringz "\nNums ok!"
+
 INPUT_N_DONE	lea r0 , MSG_N_OK
 		puts
 		lea r0, MSG_ENTER_NUM
@@ -28,17 +20,20 @@ INPUT_N_DONE	lea r0 , MSG_N_OK
 		MSG_N_OK .stringz "\nN ok!"
 MENU		lea r0 , MSG_MENU	;Shows menu and ask for option
 		puts
-		MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Higher value\n3 Descending Sort\n4 MUL 4?\n5 Halt\n\nEnter op."
 		jsr INPUT	; r4 now has option
-		add r1 , r4 , #-5
+		add r1 , r4 , #-7
 		brz EXIT
 		add r1 , r4 , #-1
 		brz MAIN_MSG
 		add r1 , r4 , #-2
 		brz HIGH_VAL
 		add r1 , r4 , #-3
-		brz SORT_OPT
+		brz LOW_VAL
 		add r1 , r4 , #-4
+		brz DESC_SORT
+		add r1 , r4 , #-5
+		brz ASC_SORT
+		add r1 , r4 , #-6
 		brz MUL_4
 		; else invalid option
 		br WHAT	
@@ -54,20 +49,81 @@ HIGH_VAL	lea r0 MSG_HIGH
 		MSG_HIGH .stringz "\nHIGH VAL:\n"
 		jsr SORT
 		;show only first pos
+
+		; set next operator
+		and r6,r6,#0
+		add r6,r6,#1
+		;set number of numbers to show
 		and r4 , r4 , #0
 		add r4 , r4 , #1 ; only one
+		lea r3 , DATA_STORE		; r3 <- address of data 
+		add r3 , r3 , #1
 		jsr SHOW_PREP
 		br MENU
-		
-SORT_OPT	lea r0 MSG_SORT
+
+LOW_VAL		lea r0 MSG_LOW
 		puts
-		MSG_SORT .stringz "\nDES.SORT:\n"
+		MSG_LOW .stringz "\nLOW VAL:\n"
 		jsr SORT
-		ld r4 , N_STORE ; so SHOW_PREP knows how many to show
+		;show only first pos
+		; set next operator
+		and r6,r6,#0
+		add r6,r6,#1
+		;set number of numbers to show
+		and r4 , r4 , #0
+		add r4 , r4 , #1 ; only one
+		lea r3 , DATA_STORE		; r3 <- address of data 
+		;add r3 , r3 , #1 no need to increase
+		ld r2,N_STORE
+		add r3,r3,r2 ; last position
 		jsr SHOW_PREP
 		br MENU
 		
-SORT		ld r4 , N_STORE
+DESC_SORT
+		;save reg
+		lea r0 MSG_DESC
+		puts
+		MSG_DESC .stringz "\nDESC.SORT:\n"
+		jsr SORT
+		lea r3 , DATA_STORE		; r3 <- address of data 
+		add r3 , r3 , #1
+		ld r4 , N_STORE ; so SHOW_PREP knows how many to show
+		;set next operator
+		and r6,r6,#0
+		add r6,r6,#1
+		jsr SHOW_PREP
+		br MENU
+
+ASC_SORT	
+		;save reg
+		lea r0 MSG_ASC
+		puts
+		MSG_ASC .stringz "\nASC.SORT:\n"
+		jsr SORT
+		
+		;set start point
+		lea r3 , DATA_STORE		; r3 <- address of data 
+		;add r3 , r3 , #1 no need to increase
+		ld r2,N_STORE
+		add r3,r3,r2 ; last position
+		
+		; set how many to show
+		ld r4 , N_STORE ; so SHOW_PREP knows how many to show
+		
+		;set next operator
+		and r6,r6,#0
+		add r6,r6,#-1
+		jsr SHOW_PREP
+		br MENU
+		
+SORT		st r0 , SORT_R0
+		st r1 , SORT_R1
+		st r2 , SORT_R2
+		st r3 , SORT_R3
+		st r4 , SORT_R4
+		st r5 , SORT_R5
+		st r6 , SORT_R6	
+		ld r4 , N_STORE
 		
 OUTERLOOP	add r4, r4, #-1 ; r4 counter outer loop
 		brnz SORTED
@@ -89,8 +145,23 @@ SWAPPED   	ADD     R3, R3, #1
           	BRP     INNERLOOP   
          	BRNZP   OUTERLOOP 
   
-SORTED		ret
-
+SORTED	
+		ld r0 , SORT_R0
+		ld r1 , SORT_R1
+		ld r2 , SORT_R2
+		ld r3 , SORT_R3
+		ld r4 , SORT_R4
+		ld r5 , SORT_R5
+		ld r6 , SORT_R6
+		ret
+SORT_R0 .FILL 0
+SORT_R1 .FILL 0
+SORT_R2 .FILL 0
+SORT_R3 .FILL 0
+SORT_R4 .FILL 0
+SORT_R5 .FILL 0
+SORT_R6 .FILL 0
+N_STORE		.blkw 1	
 NEG_1		LDR     R2, R3, #1
 		brp	SWAP
 		br 	CONT
@@ -98,23 +169,23 @@ NEG_1		LDR     R2, R3, #1
 		
 SHOW_PREP	; Needs r3 with address of data array
 		; Needs r4 with N
-		add r1 , r7 , #0
-		jsr PUSH_R1_SCOPE		
-		lea r3 , DATA_STORE		; r3 <- address of data 
-		add r3 , r3 , #1
-SHOW_LOOP	lea r0 , MSG_NL
+		; Needs r6 with the number to sum for the next
+		st r7, SHOW_R7		
+		;lea r3 , DATA_STORE		; r3 <- address of data 
+		;add r3 , r3 , #1
+SHOW_LOOP	lea r0 , MSG_SPACE
 		puts
 		add r4, r4, #-1		
 		brn SHOW_END	
 		ldr r0, r3, #0
 		
 		jsr DISPD
-		add r3, r3, #1
+		add r3, r3, r6
 		br SHOW_LOOP
 
-SHOW_END 	jsr POP_R1_SCOPE
-		add r7 , r1 , #0
+SHOW_END ld r7, SHOW_R7
 		ret		
+SHOW_R7 .FILL 0
 
 MUL_4		lea r0 , MSG_MUL4
 		puts
@@ -134,17 +205,22 @@ CONT_M4		add r3 , r3 , #1
 		brz MUL_4_DONE
 		br MUL_4_LOOP
 		
-IS_MUL		lea r0 , MSG_NL
+IS_MUL		lea r0 , MSG_SPACE
 		puts
 		add r0 , r1 , #0
 		jsr DISPD
 		br CONT_M4
 MUL_4_DONE	br MENU
-MSG_NL .stringz " "
+MSG_SPACE .stringz " "
 
+NOT_IN_RANGE	lea r0 , MSG_ERROR_N
+		puts
+		br MAIN
 
-
-
+NUM_DONE	lea r0 , MSG_NUM_OK
+		puts	
+		br MENU
+		MSG_NUM_OK .stringz "\nNums ok!"
 	
 ENTER_NUM	;let r3 be the counter
 		ld r3 , N_STORE
@@ -154,16 +230,8 @@ ENTER_NUM_LOOP	add r3 , r3 , #-1
 		jsr INPUT
 		add r1 , r4 , #0
 		jsr PUSH_R1_DATA
-		br ENTER_NUM_LOOP
-
-
-N_STORE		.blkw 1				
+		br ENTER_NUM_LOOP			
 		
-NOT_IN_RANGE	lea r0 , MSG_ERROR_N
-		puts
-		br MAIN
-
-M		.fill #4
 DATA_STORE 	.blkw #31 ; because push pushes in the next
 MSG_MUL4 .stringz "\n MUL4: \n"	
 MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
@@ -171,8 +239,7 @@ N_LOW		.fill #15 ;15
 N_HIGH		.fill #30 ;30
 CHECK_N		; check range for N
 		; assumes N in r4
-		add r1 , r7 , #0
-		jsr PUSH_R1_SCOPE
+		st r7, 	CHECK_N_R7
 		
 		ld r1 , N_LOW
 		jsr NEGATE_R1
@@ -184,20 +251,19 @@ CHECK_N		; check range for N
 		add r1 , r4 , r1
 		brp NOT_IN_RANGE
 		
-		jsr POP_R1_SCOPE
-		add r7 , r1 , #0
+		ld r7, CHECK_N_R7
 		; else we are ready to go
 		ret
-
+CHECK_N_R7 .FILL 0
 INPUT		; subroutine, leaves stuff in r4
-		; push r7 so we dont lose where we came from
-		add r1 , r7 , #0 ; since PUSH_R1 pushes R1
-		jsr PUSH_R1_SCOPE 
+		; save r7 so we dont lose where we came from
+		st r7, 	INPUT_R7
 
 
-INPUT_NO_PUSH	lea r0 , MSG_ENTER
+
+INPUT_NO_SAVE	lea r0 , MSG_ENTER
 		
-		; we dont need to push r7 so as long we
+		; we dont need to save r7 so as long we
 		; dont go to something that also goes to a subroutine
 
 		MSG_ENTER .stringz "\nEnter it:"
@@ -223,7 +289,6 @@ INPUT_I		getc	; gets c in r0
 		add r1 , r1 , #-15
 		add r1 , r1 , #-15
 		brz NEGATIVE
-		
 
 		; check if it is a number indeed
 		add r1 , r0 , #0	; copy r0 in r1
@@ -254,19 +319,6 @@ ACCUM		add r1 , r4 , #0 ; r1 <- 1 r4
 		brn OVERFLOW		
 		add r4 , r4 , r0 ; r4 <= 10 r1 + r0
 		brn OVERFLOW
-		; check overflow for bubblesort-comparisons
-		;add r1 , r4 , r4 ; 2 times the number have to be representable
-		;brn OVERFLOW_BUBBLE
-
-		; check overflow for ascii display
-		;add r1 , r1 , r1 ; 4 times the number has to be representable
-		; actually this is a bit too harsh, it will pass up to 8192
-		; but the disp code admits up to 9999
-		; currently trying to improve ascii conversion subroutine
-		; done this no longer necessary
-		; ascci conversion works up to 32767 
-		;brn OVERFLOW_ASCII
-
 		br INPUT_I
 		
 NEGATIVE	not r2 , r2
@@ -277,27 +329,22 @@ OVERFLOW	add r1 , r4 , r4
 OVERFLOW_2		lea r0 , MSG_OVERFLOW
 		MSG_OVERFLOW .stringz "\nOverflow, try with a lower number."
 		puts
-		br INPUT_NO_PUSH
+		br INPUT_NO_SAVE
 CASE		add r1, r2, #0
 		brzp OVERFLOW_2
 		br INPUT_I
 OVERFLOW_BUBBLE lea r0 , MSG_B_OVERFLOW
 		MSG_B_OVERFLOW .stringz "\nOverflow for comparison, try with a lower number."
 		puts
-		br INPUT_NO_PUSH
+		br INPUT_NO_SAVE
 OVERFLOW_ASCII	lea r0 , MSG_A_OVERFLOW
 		MSG_A_OVERFLOW .stringz "\nOverflow for ASCII decimal representation,try with a lower number."
 		puts
-		br INPUT_NO_PUSH		
-INPUT_READY	; pop r7 to return (pop stack)
-		
-		jsr POP_R1_SCOPE
-		add r7 , r1 , #0
+		br INPUT_NO_SAVE		
+INPUT_READY	ld r7, INPUT_R7
 		add r0 , r4 , #0
-		
-
 		ret	; go home boy
-
+INPUT_R7 .FILL 0
 YES_ENTER 	; if enter was first char, it will just assume thats a 0
 	
 		; check if we need to negate
@@ -312,28 +359,13 @@ DONT_NEGATE	add r4 , r1 , #0
 		br INPUT_READY
 
 
-
-
-
-
-
 NEGATE_R1	; places in r1 the 2complement of r1
 		not r1 , r1
 		add r1 , r1 , #1
 		ret
 
-
 ;LIFO STACK uses r1 as auxiliar register
-PUSH_R1_SCOPE	;r6 is used as stack register
-		add r6, r6, #1
-		str r1, r6, #0
-		ret	
-
-POP_R1_SCOPE	;r6 used as an stack register
-		ldr r1, r6, #0
-		add r6, r6, #-1
-		ret
-PUSH_R1_DATA	;r5 us used as stack register
+PUSH_R1_DATA	;r5 used as stack register
 		add r5 , r5, #1
 		str r1 , r5 ,#0
 		ret

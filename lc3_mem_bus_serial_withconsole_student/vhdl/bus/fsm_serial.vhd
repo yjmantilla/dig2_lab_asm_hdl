@@ -21,7 +21,7 @@ Port ( 	CLK		: in std_logic;
 			DATA_W	: out std_logic ;								
 			DATA_IN	: out std_logic_vector(7 downto 0);		
 			ACK_W		: in std_logic; 								
-			-- Signals used by the programming/communication module
+			-- Signals used by the ReadWriteMEM / Peripheral module
 			ChrReadyFromPC : out std_logic;						
 			Data_Rx			: out std_logic_vector(7 downto 0);
 			Rx_Ack			: in  std_logic;
@@ -35,11 +35,11 @@ architecture Behavioral of fsm_serial is
 
 -- FSM for Reception
 type uart_rx is (rx0, rx1, rx2);
-signal state_rx	:	uart_rx := rx0;
+signal state_rx : uart_rx := rx0;
 
 -- FSM for Transmission
-type uart_tx is (tx0, tx1, tx2);
-signal state_tx	:	uart_tx	:=tx1;
+type uart_tx is (tx0, tx1, tx2, tx3);
+signal state_tx : uart_tx := tx1;
 
 begin
 -- Reception Process
@@ -66,8 +66,8 @@ begin
 					state_rx <= rx2;
 					ACK_R <= '0';
 				when rx2 => 
-					ChrReadyFromPC <= '0';
 					if (Rx_Ack = '1') then 		-- Protocol already processed char
+						ChrReadyFromPC <= '0';
 						state_rx <= rx0;
 					else
 						state_rx <= rx2;
@@ -86,7 +86,7 @@ begin
 		elsif (rising_edge(CLK)) then
 			case state_tx is
 				when tx0 =>	
-					if(ChrReadyToPC = '1') then			-- Transmission started
+					if(ChrReadyToPC = '1') then		-- Transmission started
 						state_tx <= tx1;	
 						DATA_IN <= Data_Tx;
 					else		
@@ -98,10 +98,16 @@ begin
 				when tx2 =>									
 					DATA_W <= '0';
 					if ACK_W = '1' then 					-- Wait until UART process data
-						state_tx<=tx0;	
+						state_tx <= tx3;	
 					else
-						state_tx<=tx2;	
-					end if;	
+						state_tx <= tx2;	
+					end if;
+				when tx3 =>
+					if (ChrReadyToPC = '0') then
+						state_tx <= tx0;
+					else
+						state_tx <= tx3;	
+					end if;
 			end case;
 		end if;
 	end process;
