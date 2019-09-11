@@ -1,5 +1,5 @@
-		.orig x3000
-MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt\n\nEnter op."
+.orig x0000
+MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt?\n\nEnter op."
 MSG_ENTER_N	.stringz "\n\nFirst enter N"
 MSG_ENTER_NUM	.stringz "\n\nEnter nums"
 MSG_N_OK .stringz "\nN ok!"
@@ -46,7 +46,7 @@ WHAT		lea r0 , MSG_WHAT
 		br MENU	
 
 
-EXIT		halt	; end program
+EXIT		br MENU	; end program, no halt option?
 HIGH_VAL	lea r0 MSG_HIGH
 		jsr PUTSMSG
 		
@@ -335,7 +335,7 @@ INPUT_I		jsr GETCHAR	; gets c in r0
 		
 		add r1 , r0 , #-10	; check if enter was pressed
 		brz YES_ENTER
-		out	; echo what is in r0 (if not enter)
+		jsr PUTCHAR	; echo what is in r0 (if not enter)
 		
 		; check if it is a negative number (-) (45)
 		add r1 , r0 , #-15
@@ -386,10 +386,6 @@ OVERFLOW_2		lea r0 , MSG_OVERFLOW
 CASE		add r1, r2, #0
 		brzp OVERFLOW_2
 		br INPUT_I
-OVERFLOW_BUBBLE lea r0 , MSG_B_OVERFLOW
-		MSG_B_OVERFLOW .stringz "\nOverflow for comparison, try with a lower number."
-		jsr PUTSMSG
-		br INPUT_NO_SAVE
 OVERFLOW_ASCII	lea r0 , MSG_A_OVERFLOW
 		MSG_A_OVERFLOW .stringz "\nOverflow for ASCII decimal representation,try with a lower number."
 		jsr PUTSMSG
@@ -438,7 +434,7 @@ DISPD	ADD R0, R0, #0		; to assert if the number is not zero
 	BRnp DISPD_NON_ZERO
 	ST r7, DISPD_R7			; store home
 	LD R0, DISPD_0		; load 0 in ascii
-	OUT			; display to console
+	jsr PUTCHAR			; display to console
 	LD R7, DISPD_R7		; load r7 again to return
 	ret
 DISPD_NON_ZERO
@@ -464,7 +460,7 @@ DISPD_NON_ZERO
 	NOT R5, R5	; if it is negate it
 	ADD R5, R5, #1	; Negate to positive
 	LD R0, DISPD_NEG	; Input is negative. Display negative sign.
-	OUT		; Now we may continue with de ascending loop
+	jsr PUTCHAR		; Now we may continue with de ascending loop
 DISPD_LOOP_ASC		; this loop is to find the largest power of 10 used by the number
 			; but it actually overshoots...
 	AND R1, R1, #0	; clear r1
@@ -493,7 +489,7 @@ DISPD_LOOP_DESC_AGAIN
 	JSR DIV		; And see how many times the one fits in the other
 ; Here is where we actually display something
 	ADD R0, R1, R4	; ascii 0 + offset of the number
-	OUT
+	jsr PUTCHAR
 	JSR MUL		; Multiply power of ten by result of integer division
 	NOT R1, R1
 	ADD R1, R1, #1	; And negate result
