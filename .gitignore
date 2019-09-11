@@ -4,7 +4,7 @@
 
 # Assembly
 *.bin
-*.hex
+#*.hex
 *.obj
 *.lst
 *.sym
