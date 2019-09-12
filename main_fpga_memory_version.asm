@@ -295,7 +295,7 @@ DATA_STORE_4 .FILL x3000
 MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
 MSG_NUM_OK .stringz "\nNums ok!"
 N_LOW		.fill #2 ;15
-N_HIGH		.fill #1000 ;30
+N_HIGH		.fill #32767 ;30
 CHECK_N		; check range for N
 		; assumes N in r4
 		st r7, 	CHECK_N_R7
