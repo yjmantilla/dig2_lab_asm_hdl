@@ -1,11 +1,13 @@
 .orig x0000
-MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\n7 Halt?\n\nEnter op."
+MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\nEnter op."
 MSG_ENTER_N	.stringz "\n\nFirst enter N"
 MSG_ENTER_NUM	.stringz "\n\nEnter nums"
 MSG_N_OK .stringz "\nN ok!"
 MSG_WHAT .stringz "\nWrong Input!"
 MSG_HIGH .stringz "\nHIGHEST:\n"
 MSG_LOW .stringz "\nLOWEST:\n"
+MSG_MUL .stringz "\nMULTS: \n"	
+MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
 
 BEGIN		br MAIN_MSG
 
@@ -25,8 +27,6 @@ INPUT_N_DONE	lea r0 , MSG_N_OK
 MENU		lea r0 , MSG_MENU	;Shows menu and ask for option
 		jsr PUTSMSG
 		jsr INPUT	; r4 now has option
-		add r1 , r4 , #-7
-		brz EXIT
 		add r1 , r4 , #-1
 		brz MAIN_MSG
 		add r1 , r4 , #-2
@@ -45,8 +45,6 @@ WHAT		lea r0 , MSG_WHAT
 		jsr PUTSMSG
 		br MENU	
 
-
-EXIT		br MENU	; end program, no halt option?
 HIGH_VAL	lea r0 MSG_HIGH
 		jsr PUTSMSG
 		
@@ -283,13 +281,12 @@ ENTER_NUM_LOOP	add r3 , r3 , #-1
 		jsr INPUT
 		add r1 , r4 , #0
 		jsr PUSH_R1_DATA
-		br ENTER_NUM_LOOP			
-		
+		br ENTER_NUM_LOOP
+			
 DATA_STORE 	.blkw #31 ; because push pushes in the next
-MSG_MUL .stringz "\nMULTS: \n"	
-MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
-N_LOW		.fill #15 ;15
-N_HIGH		.fill #30 ;30
+
+N_LOW		.fill #2 ;15
+N_HIGH		.fill #250 ;30
 CHECK_N		; check range for N
 		; assumes N in r4
 		st r7, 	CHECK_N_R7
@@ -664,4 +661,6 @@ KBSR: .FILL xFE00 ; Keyboard Status Register Address
 KBDR: .FILL xFE02 ; Keyboard Data Register Address
 DSR: .FILL xFE04 ; Display Status Register Address
 DDR: .FILL xFE06 ; Display Data Register Address
+
+
 .end
