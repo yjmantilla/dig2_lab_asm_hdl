@@ -1,0 +1,17 @@
+This is a text that you can use to test the
+consoleecho program written for the LC3 processor
+running on the FPGA.
+
+Please check that you can read this text entirely
+in cutecom display. If there are missing characters,
+please increase the Char delay as there could be some
+issues with the auto-speed detector inside the Serial 
+(UART) module preventing the system to detect the
+appropriate speed.
+
+Thank you
+LGGM!
+
+
+
+

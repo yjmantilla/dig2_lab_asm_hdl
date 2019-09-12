@@ -1,0 +1,1312 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.12 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.12 secs
+ 
+--> 
+Reading design: Top.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "Top.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "Top"
+Output Format                      : NGC
+Target Device                      : xc3s500e-5-fg320
+
+---- Source Options
+Top Module Name                    : Top
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 24
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/control_guts_package.vhd" in Library work.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/microsequencer.vhd" in Library work.
+Architecture behavior of Entity microsequencer is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/control_store.vhd" in Library work.
+Architecture behavior of Entity control_store is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/data_path_package.vhd" in Library work.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/busseddriversresolved.vhd" in Library work.
+Architecture dataflow of Entity busseddriversresolved is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/reg_file.vhd" in Library work.
+Architecture behavior of Entity reg_file is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/alu.vhd" in Library work.
+Architecture behavior of Entity alu is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/control.vhd" in Library work.
+Architecture structure of Entity control is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/nzp_logic.vhd" in Library work.
+Architecture behavior of Entity nzp_logic is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/addr_ctl_logic.vhd" in Library work.
+Architecture behavior of Entity addr_ctl_logic is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/memory.vhd" in Library work.
+Architecture behavior of Entity memory is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/template_register.vhd" in Library work.
+Architecture behavior of Entity template_register is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_serial.vhd" in Library work.
+Architecture behavioral of Entity fsm_serial is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_readwritemem.vhd" in Library work.
+Architecture behavioral of Entity fsm_readwritemem is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_memory.vhd" in Library work.
+Architecture behavioral of Entity fsm_memory is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_lc3.vhd" in Library work.
+Architecture behavioral of Entity fsm_lc3 is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/serial/serialinterface.vhd" in Library work.
+Architecture serialinterface of Entity serialinterface is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/peripheral/peripheral.vhd" in Library work.
+Architecture behavioral of Entity peripheral_uart is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/serial/serial.vhd" in Library work.
+Architecture serial of Entity serial is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/bus.vhd" in Library work.
+Architecture behavioral of Entity systembus is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/memory/nexys2_mem_interface.vhd" in Library work.
+Architecture behavioral of Entity nexys2_mem_interface is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/lc_3_data_path.vhd" in Library work.
+Architecture structure of Entity lc_3_data_path is up to date.
+Compiling vhdl file "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/top/top.vhd" in Library work.
+Architecture behavioral of Entity top is up to date.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <Top> in library <work> (architecture <behavioral>) with generics.
+	ADDR_FPGA_WIDTH = 16
+	ADDR_MEM_WIDTH = 23
+	CYCLES_WAITING = 4
+	DATA_WIDTH = 16
+
+Analyzing hierarchy for entity <peripheral_uart> in library <work> (architecture <behavioral>) with generics.
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+
+Analyzing hierarchy for entity <Serial> in library <work> (architecture <serial>).
+
+Analyzing hierarchy for entity <systembus> in library <work> (architecture <behavioral>) with generics.
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+
+Analyzing hierarchy for entity <nexys2_mem_interface> in library <work> (architecture <behavioral>) with generics.
+	ADDR_FPGA_WIDTH = 16
+	ADDR_MEM_WIDTH = 23
+	CYCLES_WAITING = 4
+	DATA_WIDTH = 16
+
+Analyzing hierarchy for entity <LC_3_data_path> in library <work> (architecture <structure>) with generics.
+	DATA_BITS = 16
+	MEMORY_SIZE = 16
+
+Analyzing hierarchy for entity <serialinterface> in library <work> (architecture <serialinterface>).
+
+Analyzing hierarchy for entity <fsm_serial> in library <work> (architecture <behavioral>).
+
+Analyzing hierarchy for entity <fsm_readwritemem> in library <work> (architecture <behavioral>) with generics.
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+
+Analyzing hierarchy for entity <fsm_memory> in library <work> (architecture <behavioral>) with generics.
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+
+Analyzing hierarchy for entity <fsm_lc3> in library <work> (architecture <behavioral>) with generics.
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+
+Analyzing hierarchy for entity <BussedDriversResolved> in library <work> (architecture <dataflow>).
+
+Analyzing hierarchy for entity <REG_FILE> in library <work> (architecture <behavior>).
+
+Analyzing hierarchy for entity <ALU> in library <work> (architecture <behavior>).
+
+Analyzing hierarchy for entity <CONTROL> in library <work> (architecture <structure>).
+
+Analyzing hierarchy for entity <NZP_LOGIC> in library <work> (architecture <behavior>).
+
+Analyzing hierarchy for entity <ADDR_CTL_LOGIC> in library <work> (architecture <behavior>).
+
+Analyzing hierarchy for entity <MEMORY> in library <work> (architecture <behavior>) with generics.
+	DATA_BITS = 16
+	MEMORY_SIZE = 16
+
+Analyzing hierarchy for entity <template_register> in library <work> (architecture <behavior>) with generics.
+	BIT_WIDTH = 16
+
+Analyzing hierarchy for entity <Microsequencer> in library <work> (architecture <behavior>).
+
+Analyzing hierarchy for entity <Control_Store> in library <work> (architecture <behavior>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing generic Entity <Top> in library <work> (Architecture <behavioral>).
+	ADDR_FPGA_WIDTH = 16
+	ADDR_MEM_WIDTH = 23
+	CYCLES_WAITING = 4
+	DATA_WIDTH = 16
+    Set user-defined property "LOC =  B8" for signal <CLK> in unit <Top>.
+    Set user-defined property "LOC =  H13" for signal <RST> in unit <Top>.
+    Set user-defined property "LOC =  R4 F4 P15 E17 K14 K15 J15 J14" for signal <LEDS> in unit <Top>.
+    Set user-defined property "LOC =  P9" for signal <TXD> in unit <Top>.
+    Set user-defined property "LOC =  U6" for signal <RXD> in unit <Top>.
+    Set user-defined property "LOC =  K6 D1 K3 D2 C1 C2 E2 M5 E1 F2 G4 G5 G6 G3 F1 H6 H3 J5 H2 H1 H4 J2 J1" for signal <Addr_m> in unit <Top>.
+    Set user-defined property "LOC =  T1 R3 N4 L2 M6 M3 L5 L3 R2 P2 P1 N5 M4 L6 L4 L1" for signal <Data_m> in unit <Top>.
+    Set user-defined property "LOC =  H5" for signal <Clk_m> in unit <Top>.
+    Set user-defined property "LOC =  J4" for signal <ADVn_m> in unit <Top>.
+    Set user-defined property "LOC =  P7" for signal <CRE_m> in unit <Top>.
+    Set user-defined property "LOC =  R6" for signal <CEn_m> in unit <Top>.
+    Set user-defined property "LOC =  T2" for signal <OEn_m> in unit <Top>.
+    Set user-defined property "LOC =  N7" for signal <WEn_m> in unit <Top>.
+    Set user-defined property "LOC =  K5" for signal <LBn_m> in unit <Top>.
+    Set user-defined property "LOC =  K4" for signal <UBn_m> in unit <Top>.
+WARNING:Xst:753 - "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/top/top.vhd" line 349: Unconnected output port 'LEDS' of component 'LC_3_data_path'.
+Entity <Top> analyzed. Unit <Top> generated.
+
+Analyzing generic Entity <peripheral_uart> in library <work> (Architecture <behavioral>).
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+WARNING:Xst:1610 - "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/peripheral/peripheral.vhd" line 88: Width mismatch. <data_RPer> has a width of 16 bits but assigned expression is 8-bit wide.
+WARNING:Xst:1610 - "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/peripheral/peripheral.vhd" line 102: Width mismatch. <lc3_tx_data> has a width of 8 bits but assigned expression is 16-bit wide.
+Entity <peripheral_uart> analyzed. Unit <peripheral_uart> generated.
+
+Analyzing Entity <Serial> in library <work> (Architecture <serial>).
+Entity <Serial> analyzed. Unit <Serial> generated.
+
+Analyzing Entity <serialinterface> in library <work> (Architecture <serialinterface>).
+Entity <serialinterface> analyzed. Unit <serialinterface> generated.
+
+Analyzing generic Entity <systembus> in library <work> (Architecture <behavioral>).
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+Entity <systembus> analyzed. Unit <systembus> generated.
+
+Analyzing Entity <fsm_serial> in library <work> (Architecture <behavioral>).
+Entity <fsm_serial> analyzed. Unit <fsm_serial> generated.
+
+Analyzing generic Entity <fsm_readwritemem> in library <work> (Architecture <behavioral>).
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+Entity <fsm_readwritemem> analyzed. Unit <fsm_readwritemem> generated.
+
+Analyzing generic Entity <fsm_memory> in library <work> (Architecture <behavioral>).
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+Entity <fsm_memory> analyzed. Unit <fsm_memory> generated.
+
+Analyzing generic Entity <fsm_lc3> in library <work> (Architecture <behavioral>).
+	ADDR_LC3_WIDTH = 16
+	DATA_LC3_WIDTH = 16
+Entity <fsm_lc3> analyzed. Unit <fsm_lc3> generated.
+
+Analyzing generic Entity <nexys2_mem_interface> in library <work> (Architecture <behavioral>).
+	ADDR_FPGA_WIDTH = 16
+	ADDR_MEM_WIDTH = 23
+	CYCLES_WAITING = 4
+	DATA_WIDTH = 16
+INFO:Xst:2679 - Register <sClk_m> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sADVn_m> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sCRE_m> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sLBn_m> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sUBn_m> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<22>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<21>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<20>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<19>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<18>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<17>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <sAddr_m<16>> in unit <nexys2_mem_interface> has a constant value of 0 during circuit operation. The register is replaced by logic.
+Entity <nexys2_mem_interface> analyzed. Unit <nexys2_mem_interface> generated.
+
+Analyzing generic Entity <LC_3_data_path> in library <work> (Architecture <structure>).
+	DATA_BITS = 16
+	MEMORY_SIZE = 16
+Entity <LC_3_data_path> analyzed. Unit <LC_3_data_path> generated.
+
+Analyzing Entity <BussedDriversResolved> in library <work> (Architecture <dataflow>).
+Entity <BussedDriversResolved> analyzed. Unit <BussedDriversResolved> generated.
+
+Analyzing Entity <REG_FILE> in library <work> (Architecture <behavior>).
+Entity <REG_FILE> analyzed. Unit <REG_FILE> generated.
+
+Analyzing Entity <ALU> in library <work> (Architecture <behavior>).
+Entity <ALU> analyzed. Unit <ALU> generated.
+
+Analyzing Entity <CONTROL> in library <work> (Architecture <structure>).
+Entity <CONTROL> analyzed. Unit <CONTROL> generated.
+
+Analyzing Entity <Microsequencer> in library <work> (Architecture <behavior>).
+Entity <Microsequencer> analyzed. Unit <Microsequencer> generated.
+
+Analyzing Entity <Control_Store> in library <work> (Architecture <behavior>).
+Entity <Control_Store> analyzed. Unit <Control_Store> generated.
+
+Analyzing Entity <NZP_LOGIC> in library <work> (Architecture <behavior>).
+Entity <NZP_LOGIC> analyzed. Unit <NZP_LOGIC> generated.
+
+Analyzing Entity <ADDR_CTL_LOGIC> in library <work> (Architecture <behavior>).
+Entity <ADDR_CTL_LOGIC> analyzed. Unit <ADDR_CTL_LOGIC> generated.
+
+Analyzing generic Entity <MEMORY> in library <work> (Architecture <behavior>).
+	DATA_BITS = 16
+	MEMORY_SIZE = 16
+Entity <MEMORY> analyzed. Unit <MEMORY> generated.
+
+Analyzing generic Entity <template_register> in library <work> (Architecture <behavior>).
+	BIT_WIDTH = 16
+Entity <template_register> analyzed. Unit <template_register> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <peripheral_uart>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/peripheral/peripheral.vhd".
+WARNING:Xst:647 - Input <data_WPer<15:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found finite state machine <FSM_0> for signal <tx_chr_state>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 5                                              |
+    | Inputs             | 2                                              |
+    | Outputs            | 4                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | tx_uart0                                       |
+    | Power Up State     | tx_uart0                                       |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found finite state machine <FSM_1> for signal <peripheral_state>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 4                                              |
+    | Inputs             | 1                                              |
+    | Outputs            | 4                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | init                                           |
+    | Power Up State     | init                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found finite state machine <FSM_2> for signal <rx_chr_state>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 6                                              |
+    | Inputs             | 2                                              |
+    | Outputs            | 4                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | rx_uart0                                       |
+    | Power Up State     | rx_uart0                                       |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <PerOpDone>.
+    Found 16-bit register for signal <data_RPer>.
+    Found 1-bit register for signal <ChrReadyToPC>.
+    Found 8-bit register for signal <Data_Tx>.
+    Found 1-bit register for signal <Rx_Ack>.
+    Found 8-bit register for signal <lc3_rx_data>.
+    Found 1-bit register for signal <lc3_rx_next>.
+    Found 1-bit register for signal <lc3_rx_ready>.
+    Found 8-bit register for signal <lc3_tx_data>.
+    Found 1-bit register for signal <lc3_tx_ready>.
+    Found 1-bit register for signal <lc3_tx_write>.
+    Summary:
+	inferred   3 Finite State Machine(s).
+	inferred  47 D-type flip-flop(s).
+Unit <peripheral_uart> synthesized.
+
+
+Synthesizing Unit <nexys2_mem_interface>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/memory/nexys2_mem_interface.vhd".
+    Found finite state machine <FSM_3> for signal <memory_op_states>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 6                                              |
+    | Inputs             | 3                                              |
+    | Outputs            | 3                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RESET                     (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | memst_reset                                    |
+    | Power Up State     | memst_reset                                    |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 16-bit tristate buffer for signal <Data_m>.
+    Found 2-bit register for signal <memory_cnt_cycles>.
+    Found 2-bit adder for signal <memory_cnt_cycles$addsub0000> created at line 135.
+    Found 2-bit adder carry out for signal <memory_op_states$addsub0000> created at line 136.
+    Found 16-bit register for signal <sAddr_m<15:0>>.
+    Found 1-bit register for signal <sBusyn_f>.
+    Found 1-bit register for signal <sCEn_m>.
+    Found 16-bit register for signal <sData_f_in>.
+    Found 16-bit register for signal <sData_m>.
+    Found 1-bit register for signal <sOEn_m>.
+    Found 1-bit register for signal <sOp_Ack_f>.
+    Found 1-bit register for signal <sWEn_m>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  55 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred  16 Tristate(s).
+Unit <nexys2_mem_interface> synthesized.
+
+
+Synthesizing Unit <serialinterface>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/serial/serialinterface.vhd".
+    Found finite state machine <FSM_4> for signal <Sreg0>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 11                                             |
+    | Inputs             | 3                                              |
+    | Outputs            | 6                                              |
+    | Clock              | clock                     (rising_edge)        |
+    | Reset              | reset                     (negative)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | s1                                             |
+    | Power Up State     | s1                                             |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 8-bit register for signal <tx_data>.
+    Found 1-bit register for signal <tx_av>.
+    Found 1-bit register for signal <rx_busy>.
+    Found 2-bit up counter for signal <Bit_Cnt>.
+    Found 9-bit register for signal <busy>.
+    Found 14-bit register for signal <CK_CYCLES>.
+    Found 14-bit up counter for signal <contador>.
+    Found 17-bit register for signal <ctr0>.
+    Found 17-bit adder for signal <ctr0$addsub0000> created at line 105.
+    Found 1-bit register for signal <go>.
+    Found 1-bit register for signal <r>.
+    Found 10-bit register for signal <regin>.
+    Found 1-bit register for signal <resync>.
+    Found 1-bit register for signal <serial_clk>.
+    Found 14-bit comparator equal for signal <serial_clk$cmp_eq0000> created at line 130.
+    Found 9-bit register for signal <word>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   2 Counter(s).
+	inferred  64 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <serialinterface> synthesized.
+
+
+Synthesizing Unit <fsm_serial>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_serial.vhd".
+    Found finite state machine <FSM_5> for signal <state_rx>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 5                                              |
+    | Inputs             | 2                                              |
+    | Outputs            | 4                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | rx0                                            |
+    | Power Up State     | rx0                                            |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found finite state machine <FSM_6> for signal <state_tx>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 7                                              |
+    | Inputs             | 2                                              |
+    | Outputs            | 5                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | tx0                                            |
+    | Power Up State     | tx1                                            |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <DATA_W>.
+    Found 1-bit register for signal <ChrReadyFromPC>.
+    Found 8-bit register for signal <DATA_IN>.
+    Found 1-bit register for signal <ACK_R>.
+    Found 8-bit register for signal <Data_Rx>.
+    Summary:
+	inferred   2 Finite State Machine(s).
+	inferred  19 D-type flip-flop(s).
+Unit <fsm_serial> synthesized.
+
+
+Synthesizing Unit <fsm_readwritemem>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_readwritemem.vhd".
+    Using one-hot encoding for signal <protocol_state>.
+    Found 8-bit register for signal <LEDS>.
+    Found 1-bit register for signal <ChrReadyToPC>.
+    Found 1-bit register for signal <LC3Started>.
+    Found 1-bit register for signal <R_W>.
+    Found 1-bit register for signal <start_RW>.
+    Found 8-bit register for signal <Data_Tx>.
+    Found 1-bit register for signal <Rx_Ack>.
+    Found 16-bit register for signal <address>.
+    Found 16-bit adder for signal <address$add0000> created at line 219.
+    Found 8-bit register for signal <command>.
+    Found 8-bit comparator greatequal for signal <command$cmp_ge0000> created at line 118.
+    Found 8-bit comparator less for signal <Data_Tx$cmp_lt0000> created at line 118.
+    Found 1-bit register for signal <mem_state<0>>.
+    Found 21-bit register for signal <protocol_state>.
+    Found 21-bit register for signal <protocol_state_aftertx>.
+    Found 16-bit register for signal <sdata>.
+    Found 16-bit register for signal <size>.
+    Found 16-bit subtractor for signal <size$sub0000> created at line 207.
+    Found 1-bit register for signal <start_read>.
+    Found 1-bit register for signal <start_write>.
+    Summary:
+	inferred  80 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <fsm_readwritemem> synthesized.
+
+
+Synthesizing Unit <fsm_memory>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_memory.vhd".
+    Found finite state machine <FSM_7> for signal <mem_state>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 9                                              |
+    | Inputs             | 3                                              |
+    | Outputs            | 7                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | m0                                             |
+    | Power Up State     | m0                                             |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 16-bit register for signal <sAddr_ToM>.
+    Found 16-bit register for signal <sdata_RM>.
+    Found 16-bit register for signal <sData_ToM>.
+    Found 1-bit register for signal <sMemOpDone>.
+    Found 2-bit register for signal <sOp>.
+    Found 1-bit register for signal <sR_W>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  52 D-type flip-flop(s).
+Unit <fsm_memory> synthesized.
+
+
+Synthesizing Unit <fsm_lc3>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/fsm_lc3.vhd".
+    Found finite state machine <FSM_8> for signal <lc3_state>.
+    -----------------------------------------------------------------------
+    | States             | 5                                              |
+    | Transitions        | 10                                             |
+    | Inputs             | 5                                              |
+    | Outputs            | 5                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | lc3_init                                       |
+    | Power Up State     | lc3_init                                       |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <start_RW_M>.
+    Found 1-bit register for signal <start_RW_P>.
+    Found 16-bit register for signal <MEM>.
+    Found 1-bit register for signal <R>.
+    Found 16-bit comparator less for signal <lc3_state$cmp_lt0000> created at line 91.
+    Found 1-bit register for signal <memper_operation>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  20 D-type flip-flop(s).
+	inferred   1 Comparator(s).
+Unit <fsm_lc3> synthesized.
+
+
+Synthesizing Unit <BussedDriversResolved>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/busseddriversresolved.vhd".
+Unit <BussedDriversResolved> synthesized.
+
+
+Synthesizing Unit <REG_FILE>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/reg_file.vhd".
+    Found 16-bit 8-to-1 multiplexer for signal <SR1_out>.
+    Found 16-bit 8-to-1 multiplexer for signal <SR2_out>.
+    Found 16-bit register for signal <R0>.
+    Found 16-bit register for signal <R1>.
+    Found 16-bit register for signal <R2>.
+    Found 16-bit register for signal <R3>.
+    Found 16-bit register for signal <R4>.
+    Found 16-bit register for signal <R5>.
+    Found 16-bit register for signal <R6>.
+    Found 16-bit register for signal <R7>.
+    Summary:
+	inferred 112 D-type flip-flop(s).
+	inferred  32 Multiplexer(s).
+Unit <REG_FILE> synthesized.
+
+
+Synthesizing Unit <ALU>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/alu.vhd".
+    Found 16-bit adder for signal <A_plus_B>.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+Unit <ALU> synthesized.
+
+
+Synthesizing Unit <NZP_LOGIC>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/nzp_logic.vhd".
+    Found 1-bit register for signal <local_N>.
+    Found 16-bit comparator less for signal <local_N$cmp_lt0000> created at line 56.
+    Found 1-bit register for signal <local_P>.
+    Found 1-bit register for signal <local_Z>.
+    Summary:
+	inferred   3 D-type flip-flop(s).
+	inferred   1 Comparator(s).
+Unit <NZP_LOGIC> synthesized.
+
+
+Synthesizing Unit <ADDR_CTL_LOGIC>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/addr_ctl_logic.vhd".
+WARNING:Xst:647 - Input <MAR> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <R_W> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+Unit <ADDR_CTL_LOGIC> synthesized.
+
+
+Synthesizing Unit <MEMORY>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/memory.vhd".
+Unit <MEMORY> synthesized.
+
+
+Synthesizing Unit <template_register>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/template_register.vhd".
+    Found 16-bit register for signal <reg>.
+    Summary:
+	inferred  16 D-type flip-flop(s).
+Unit <template_register> synthesized.
+
+
+Synthesizing Unit <Microsequencer>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/microsequencer.vhd".
+Unit <Microsequencer> synthesized.
+
+
+Synthesizing Unit <Control_Store>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/control_store.vhd".
+    Found 64x49-bit ROM for signal <next_Microinstruction$rom0000> created at line 18.
+    Found 49-bit register for signal <Microinstruction>.
+    Summary:
+	inferred   1 ROM(s).
+	inferred  49 D-type flip-flop(s).
+Unit <Control_Store> synthesized.
+
+
+Synthesizing Unit <Serial>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/serial/serial.vhd".
+    Found finite state machine <FSM_9> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 4                                              |
+    | Transitions        | 8                                              |
+    | Inputs             | 4                                              |
+    | Outputs            | 5                                              |
+    | Clock              | CLK                       (rising_edge)        |
+    | Reset              | RST                       (positive)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | stiddle                                        |
+    | Power Up State     | stiddle                                        |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 8-bit register for signal <DATA_OUT>.
+    Found 1-bit register for signal <DATA_R>.
+    Found 1-bit register for signal <ACK_W>.
+    Found 8-bit register for signal <sig_DATA_IN>.
+    Found 1-bit register for signal <sig_DATA_W>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred  19 D-type flip-flop(s).
+Unit <Serial> synthesized.
+
+
+Synthesizing Unit <systembus>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/bus/bus.vhd".
+Unit <systembus> synthesized.
+
+
+Synthesizing Unit <CONTROL>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/control.vhd".
+WARNING:Xst:647 - Input <IR<8:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+Unit <CONTROL> synthesized.
+
+
+Synthesizing Unit <LC_3_data_path>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/lc3/lc_3_data_path.vhd".
+WARNING:Xst:646 - Signal <Vector_MUX> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <Set_Priv> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <SP_MUX> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <PSR_MUX> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <LD_Vector> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <LD_SavedUSP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <LD_SavedSSP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <LD_Priv> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <LD_BEN> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <KBDR> is used but never assigned. This sourceless signal will be automatically connected to value 0000000000000000.
+WARNING:Xst:646 - Signal <Gate_Vector> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <Gate_SP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <Gate_PSR> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <Gate_PC_minus_1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <DDR> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 16-bit adder for signal <ADDRs>.
+    Found 16-bit adder for signal <PCMUX$addsub0000> created at line 122.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+Unit <LC_3_data_path> synthesized.
+
+
+Synthesizing Unit <Top>.
+    Related source file is "/media/boole/CEFF-77EF/nuevo/digi/lc3_mem_bus_serial_withconsole_student/vhdl/top/top.vhd".
+Unit <Top> synthesized.
+
+WARNING:Xst:524 - All outputs of the instance <reg_DDR> of the block <template_register> are unconnected in block <LC_3_data_path>.
+   This instance will be removed from the design along with all underlying logic
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# ROMs                                                 : 1
+ 64x49-bit ROM                                         : 1
+# Adders/Subtractors                                   : 8
+ 16-bit adder                                          : 4
+ 16-bit subtractor                                     : 1
+ 17-bit adder                                          : 1
+ 2-bit adder                                           : 1
+ 2-bit adder carry out                                 : 1
+# Counters                                             : 2
+ 14-bit up counter                                     : 1
+ 2-bit up counter                                      : 1
+# Registers                                            : 195
+ 1-bit register                                        : 154
+ 10-bit register                                       : 1
+ 14-bit register                                       : 1
+ 16-bit register                                       : 21
+ 17-bit register                                       : 1
+ 2-bit register                                        : 2
+ 21-bit register                                       : 2
+ 8-bit register                                        : 11
+ 9-bit register                                        : 2
+# Comparators                                          : 5
+ 14-bit comparator equal                               : 1
+ 16-bit comparator less                                : 2
+ 8-bit comparator greatequal                           : 1
+ 8-bit comparator less                                 : 1
+# Multiplexers                                         : 2
+ 16-bit 8-to-1 multiplexer                             : 2
+# Tristates                                            : 1
+ 16-bit tristate buffer                                : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_9> for best encoding.
+Optimizing FSM <Serial_m/state/FSM> on signal <state[1:2]> with user encoding.
+-----------------------
+ State     | Encoding
+-----------------------
+ stiddle   | 00
+ streceive | 01
+ stsend    | 10
+ stsend2   | 11
+-----------------------
+Analyzing FSM <FSM_8> for best encoding.
+Optimizing FSM <SystemBus_m/fsm_lc3_comp/lc3_state/FSM> on signal <lc3_state[1:3]> with user encoding.
+------------------------
+ State      | Encoding
+------------------------
+ lc3_init   | 000
+ lc3_memen  | 001
+ lc3_memper | 010
+ lc3_mem    | 011
+ lc3_per    | 100
+------------------------
+Analyzing FSM <FSM_7> for best encoding.
+Optimizing FSM <SystemBus_m/fsm_memory_comp/mem_state/FSM> on signal <mem_state[1:5]> with one-hot encoding.
+-------------------
+ State | Encoding
+-------------------
+ m0    | 00001
+ m1    | 00010
+ m2    | 00100
+ m3    | 01000
+ m4    | 10000
+-------------------
+Analyzing FSM <FSM_6> for best encoding.
+Optimizing FSM <SystemBus_m/fsm_serial_comp/state_tx/FSM> on signal <state_tx[1:2]> with sequential encoding.
+-------------------
+ State | Encoding
+-------------------
+ tx0   | 01
+ tx1   | 00
+ tx2   | 10
+ tx3   | 11
+-------------------
+Analyzing FSM <FSM_5> for best encoding.
+Optimizing FSM <SystemBus_m/fsm_serial_comp/state_rx/FSM> on signal <state_rx[1:2]> with user encoding.
+-------------------
+ State | Encoding
+-------------------
+ rx0   | 00
+ rx1   | 01
+ rx2   | 10
+-------------------
+Analyzing FSM <FSM_4> for best encoding.
+Optimizing FSM <Serial_m/UART/Sreg0/FSM> on signal <Sreg0[1:3]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ s1    | 000
+ s2    | 001
+ s3    | 011
+ s4    | 010
+ s6    | 110
+-------------------
+Analyzing FSM <FSM_3> for best encoding.
+Optimizing FSM <Memory_m/memory_op_states/FSM> on signal <memory_op_states[1:2]> with gray encoding.
+-----------------------------
+ State           | Encoding
+-----------------------------
+ memst_reset     | 00
+ memst_waitingop | 01
+ memst_operation | 11
+-----------------------------
+Analyzing FSM <FSM_2> for best encoding.
+Optimizing FSM <PeripheralIO_m/rx_chr_state/FSM> on signal <rx_chr_state[1:2]> with gray encoding.
+----------------------
+ State    | Encoding
+----------------------
+ rx_uart0 | 00
+ rx_uart1 | 01
+ rx_uart2 | 11
+----------------------
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <PeripheralIO_m/peripheral_state/FSM> on signal <peripheral_state[1:2]> with user encoding.
+-------------------
+ State | Encoding
+-------------------
+ init  | 00
+ s0    | 01
+ s1    | 10
+-------------------
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <PeripheralIO_m/tx_chr_state/FSM> on signal <tx_chr_state[1:2]> with user encoding.
+----------------------
+ State    | Encoding
+----------------------
+ tx_uart0 | 00
+ tx_uart1 | 01
+ tx_uart2 | 10
+----------------------
+WARNING:Xst:1290 - Hierarchical block <reg_KBSR> is unconnected in block <LC3>.
+   It will be removed from the design.
+WARNING:Xst:1290 - Hierarchical block <reg_DSR> is unconnected in block <LC3>.
+   It will be removed from the design.
+WARNING:Xst:1710 - FF/Latch <data_RPer_8> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_9> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_10> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_11> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_12> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_13> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <data_RPer_14> (without init value) has a constant value of 0 in block <PeripheralIO_m>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <LEDS_3> (without init value) has a constant value of 0 in block <readwritemem_comp>. This FF/Latch will be trimmed during the optimization process.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 10
+# ROMs                                                 : 1
+ 64x49-bit ROM                                         : 1
+# Adders/Subtractors                                   : 8
+ 16-bit adder                                          : 4
+ 16-bit subtractor                                     : 1
+ 17-bit adder                                          : 1
+ 2-bit adder                                           : 1
+ 2-bit adder carry out                                 : 1
+# Counters                                             : 2
+ 14-bit up counter                                     : 1
+ 2-bit up counter                                      : 1
+# Registers                                            : 674
+ Flip-Flops                                            : 674
+# Comparators                                          : 5
+ 14-bit comparator equal                               : 1
+ 16-bit comparator less                                : 2
+ 8-bit comparator greatequal                           : 1
+ 8-bit comparator less                                 : 1
+# Multiplexers                                         : 32
+ 1-bit 8-to-1 multiplexer                              : 32
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <data_RPer_8> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_9> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_10> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_11> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_12> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_13> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <data_RPer_14> (without init value) has a constant value of 0 in block <peripheral_uart>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <LEDS_3> (without init value) has a constant value of 0 in block <fsm_readwritemem>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <peripheral_state_FSM_FFd1> in Unit <peripheral_uart> is equivalent to the following FF/Latch, which will be removed : <PerOpDone> 
+WARNING:Xst:524 - All outputs of the instance <reg_KBSR> of the block <template_register> are unconnected in block <LC_3_data_path>.
+   This instance will be removed from the design along with all underlying logic
+WARNING:Xst:524 - All outputs of the instance <reg_DSR> of the block <template_register> are unconnected in block <LC_3_data_path>.
+   This instance will be removed from the design along with all underlying logic
+WARNING:Xst:1710 - FF/Latch <Microinstruction_31> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_28> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_30> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_29> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_23> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_22> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_21> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_20> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_15> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_17> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_9> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_10> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_6> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_7> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_5> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <Microinstruction_0> (without init value) has a constant value of 0 in block <Control_Store>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <readwritemem_comp/protocol_state_aftertx_2> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_0> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_1> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_10> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_13> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_11> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_12> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_14> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <readwritemem_comp/protocol_state_aftertx_17> has a constant value of 0 in block <systembus>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <Microinstruction_48> in Unit <Control_Store> is equivalent to the following FF/Latch, which will be removed : <Microinstruction_35> 
+
+Optimizing unit <Top> ...
+
+Optimizing unit <peripheral_uart> ...
+
+Optimizing unit <ALU> ...
+
+Optimizing unit <template_register> ...
+
+Optimizing unit <Control_Store> ...
+
+Optimizing unit <serialinterface> ...
+
+Optimizing unit <REG_FILE> ...
+
+Optimizing unit <Serial> ...
+
+Optimizing unit <systembus> ...
+
+Optimizing unit <LC_3_data_path> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block Top, actual ratio is 14.
+FlipFlop LC3/reg_IR/reg_0 has been replicated 1 time(s)
+FlipFlop LC3/reg_IR/reg_1 has been replicated 1 time(s)
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 659
+ Flip-Flops                                            : 659
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : Top.ngr
+Top Level Output File Name         : Top
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : No
+
+Design Statistics
+# IOs                              : 59
+
+Cell Usage :
+# BELS                             : 1453
+#      GND                         : 1
+#      INV                         : 24
+#      LUT1                        : 47
+#      LUT2                        : 75
+#      LUT2_D                      : 2
+#      LUT2_L                      : 1
+#      LUT3                        : 356
+#      LUT3_D                      : 4
+#      LUT3_L                      : 18
+#      LUT4                        : 481
+#      LUT4_D                      : 25
+#      LUT4_L                      : 43
+#      MULT_AND                    : 6
+#      MUXCY                       : 111
+#      MUXF5                       : 114
+#      MUXF6                       : 33
+#      VCC                         : 1
+#      XORCY                       : 111
+# FlipFlops/Latches                : 659
+#      FD                          : 8
+#      FDC                         : 140
+#      FDCE                        : 311
+#      FDCE_1                      : 1
+#      FDCP                        : 10
+#      FDCPE                       : 1
+#      FDE                         : 162
+#      FDP                         : 22
+#      FDPE                        : 3
+#      FDR                         : 1
+# Clock Buffers                    : 2
+#      BUFG                        : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 58
+#      IBUF                        : 2
+#      IOBUF                       : 16
+#      OBUF                        : 40
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 3s500efg320-5 
+
+ Number of Slices:                      661  out of   4656    14%  
+ Number of Slice Flip Flops:            659  out of   9312     7%  
+ Number of 4 input LUTs:               1076  out of   9312    11%  
+ Number of IOs:                          59
+ Number of bonded IOBs:                  59  out of    232    25%  
+ Number of GCLKs:                         2  out of     24     8%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+CLK                                | BUFGP                  | 629   |
+Serial_m/UART/serial_clk1          | BUFG                   | 30    |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+---------------------------------------------------------------------+-------------------------------+-------+
+Control Signal                                                       | Buffer(FF name)               | Load  |
+---------------------------------------------------------------------+-------------------------------+-------+
+RST                                                                  | IBUF                          | 450   |
+Serial_m/UART/resync(Serial_m/UART/resync:Q)                         | NONE(Serial_m/UART/contador_0)| 25    |
+Serial_m/UART/resync_not0002_inv(Serial_m/UART/resync_cmp_eq000063:O)| NONE(Serial_m/UART/r)         | 11    |
+Serial_m/UART/busy_0__and0001(Serial_m/UART/busy_0__or000011:O)      | NONE(Serial_m/UART/busy_0)    | 9     |
+Serial_m/UART/rx_busy_and0000(Serial_m/UART/rx_busy_and00001:O)      | NONE(Serial_m/UART/go)        | 2     |
+Serial_m/sig_DATA_W(Serial_m/sig_DATA_W:Q)                           | NONE(Serial_m/UART/go)        | 2     |
+---------------------------------------------------------------------+-------------------------------+-------+
+
+Timing Summary:
+---------------
+Speed Grade: -5
+
+   Minimum period: 12.988ns (Maximum Frequency: 76.995MHz)
+   Minimum input arrival time before clock: 4.484ns
+   Maximum output required time after clock: 4.642ns
+   Maximum combinational path delay: No path found
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'CLK'
+  Clock period: 12.988ns (frequency: 76.995MHz)
+  Total number of paths / destination ports: 252334 / 985
+-------------------------------------------------------------------------
+Delay:               12.988ns (Levels of Logic = 26)
+  Source:            LC3/TheCONTROL/C_S/Microinstruction_14 (FF)
+  Destination:       LC3/TheNZP_LOGIC/local_Z (FF)
+  Source Clock:      CLK rising
+  Destination Clock: CLK rising
+
+  Data Path: LC3/TheCONTROL/C_S/Microinstruction_14 to LC3/TheNZP_LOGIC/local_Z
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               4   0.514   0.651  LC3/TheCONTROL/C_S/Microinstruction_14 (LC3/TheCONTROL/C_S/Microinstruction_14)
+     LUT3:I0->O           24   0.612   1.094  LC3/SR1MUX<0>1_1 (LC3/SR1MUX<0>1)
+     LUT3:I2->O            1   0.612   0.000  LC3/TheREG_FILE/mux_6 (LC3/TheREG_FILE/mux_6)
+     MUXF5:I0->O           1   0.278   0.000  LC3/TheREG_FILE/mux_4_f5 (LC3/TheREG_FILE/mux_4_f5)
+     MUXF6:I0->O           4   0.451   0.529  LC3/TheREG_FILE/mux_2_f6 (LC3/SR1contents<0>)
+     LUT3:I2->O            1   0.612   0.387  LC3/ADDR1MUX<0>1 (LC3/ADDR1MUX<0>)
+     LUT3:I2->O            1   0.612   0.000  LC3/Madd_ADDRs_lut<0> (LC3/Madd_ADDRs_lut<0>)
+     MUXCY:S->O            1   0.404   0.000  LC3/Madd_ADDRs_cy<0> (LC3/Madd_ADDRs_cy<0>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<1> (LC3/Madd_ADDRs_cy<1>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<2> (LC3/Madd_ADDRs_cy<2>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<3> (LC3/Madd_ADDRs_cy<3>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<4> (LC3/Madd_ADDRs_cy<4>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<5> (LC3/Madd_ADDRs_cy<5>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<6> (LC3/Madd_ADDRs_cy<6>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<7> (LC3/Madd_ADDRs_cy<7>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<8> (LC3/Madd_ADDRs_cy<8>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<9> (LC3/Madd_ADDRs_cy<9>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<10> (LC3/Madd_ADDRs_cy<10>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<11> (LC3/Madd_ADDRs_cy<11>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<12> (LC3/Madd_ADDRs_cy<12>)
+     MUXCY:CI->O           1   0.051   0.000  LC3/Madd_ADDRs_cy<13> (LC3/Madd_ADDRs_cy<13>)
+     MUXCY:CI->O           0   0.051   0.000  LC3/Madd_ADDRs_cy<14> (LC3/Madd_ADDRs_cy<14>)
+     XORCY:CI->O           3   0.699   0.454  LC3/Madd_ADDRs_xor<15> (LC3/ADDRs<15>)
+     LUT4:I3->O            1   0.612   0.360  LC3/TheBUS/bus_out<15>5 (LC3/TheBUS/bus_out<15>5)
+     LUT4:I3->O           15   0.612   0.894  LC3/TheBUS/bus_out<15>93 (LC3/TheNZP_LOGIC/local_N_cmp_lt0000)
+     LUT3:I2->O            1   0.612   0.387  LC3/TheNZP_LOGIC/local_Z_mux000072 (LC3/TheNZP_LOGIC/local_Z_mux000072)
+     LUT4:I2->O            1   0.612   0.000  LC3/TheNZP_LOGIC/local_Z_mux000086 (LC3/TheNZP_LOGIC/local_Z_mux0000)
+     FDPE:D                    0.268          LC3/TheNZP_LOGIC/local_Z
+    ----------------------------------------
+    Total                     12.988ns (8.231ns logic, 4.757ns route)
+                                       (63.4% logic, 36.6% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'Serial_m/UART/serial_clk1'
+  Clock period: 2.888ns (frequency: 346.230MHz)
+  Total number of paths / destination ports: 45 / 29
+-------------------------------------------------------------------------
+Delay:               2.888ns (Levels of Logic = 1)
+  Source:            Serial_m/UART/go (FF)
+  Destination:       Serial_m/UART/rx_busy (FF)
+  Source Clock:      Serial_m/UART/serial_clk1 rising
+  Destination Clock: Serial_m/UART/serial_clk1 rising
+
+  Data Path: Serial_m/UART/go to Serial_m/UART/rx_busy
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDCP:C->Q            19   0.514   0.922  Serial_m/UART/go (Serial_m/UART/go)
+     INV:I->O              1   0.612   0.357  Serial_m/UART/go_inv1_INV_0 (Serial_m/UART/go_inv)
+     FDCPE:CE                  0.483          Serial_m/UART/rx_busy
+    ----------------------------------------
+    Total                      2.888ns (1.609ns logic, 1.279ns route)
+                                       (55.7% logic, 44.3% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'CLK'
+  Total number of paths / destination ports: 195 / 194
+-------------------------------------------------------------------------
+Offset:              4.484ns (Levels of Logic = 2)
+  Source:            RST (PAD)
+  Destination:       Memory_m/sCEn_m (FF)
+  Destination Clock: CLK rising
+
+  Data Path: RST to Memory_m/sCEn_m
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O           470   1.106   1.190  RST_IBUF (RST_IBUF)
+     INV:I->O            104   0.612   1.092  SystemBus_m/fsm_lc3_comp/RST_inv1_INV_0 (Memory_m/RESET_inv)
+     FDE:CE                    0.483          Memory_m/sData_m_0
+    ----------------------------------------
+    Total                      4.484ns (2.201ns logic, 2.283ns route)
+                                       (49.1% logic, 50.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'Serial_m/UART/serial_clk1'
+  Total number of paths / destination ports: 19 / 19
+-------------------------------------------------------------------------
+Offset:              4.157ns (Levels of Logic = 2)
+  Source:            RST (PAD)
+  Destination:       Serial_m/UART/word_0 (FF)
+  Destination Clock: Serial_m/UART/serial_clk1 rising
+
+  Data Path: RST to Serial_m/UART/word_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O           470   1.106   1.259  RST_IBUF (RST_IBUF)
+     LUT2:I1->O            9   0.612   0.697  Serial_m/UART/word_not00011 (Serial_m/UART/word_not0001)
+     FDE:CE                    0.483          Serial_m/UART/word_0
+    ----------------------------------------
+    Total                      4.157ns (2.201ns logic, 1.956ns route)
+                                       (52.9% logic, 47.1% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'CLK'
+  Total number of paths / destination ports: 58 / 42
+-------------------------------------------------------------------------
+Offset:              4.642ns (Levels of Logic = 1)
+  Source:            Memory_m/sWEn_m (FF)
+  Destination:       WEn_m (PAD)
+  Source Clock:      CLK rising
+
+  Data Path: Memory_m/sWEn_m to WEn_m
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q             21   0.514   0.959  Memory_m/sWEn_m (Memory_m/sWEn_m)
+     OBUF:I->O                 3.169          WEn_m_OBUF (WEn_m)
+    ----------------------------------------
+    Total                      4.642ns (3.683ns logic, 0.959ns route)
+                                       (79.3% logic, 20.7% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'Serial_m/UART/serial_clk1'
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Offset:              4.040ns (Levels of Logic = 1)
+  Source:            Serial_m/UART/word_0 (FF)
+  Destination:       TXD (PAD)
+  Source Clock:      Serial_m/UART/serial_clk1 rising
+
+  Data Path: Serial_m/UART/word_0 to TXD
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              1   0.514   0.357  Serial_m/UART/word_0 (Serial_m/UART/word_0)
+     OBUF:I->O                 3.169          TXD_OBUF (TXD)
+    ----------------------------------------
+    Total                      4.040ns (3.683ns logic, 0.357ns route)
+                                       (91.2% logic, 8.8% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 37.00 secs
+Total CPU time to Xst completion: 35.37 secs
+ 
+--> 
+
+
+Total memory usage is 568240 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :   68 (   0 filtered)
+Number of infos    :   14 (   0 filtered)
+
