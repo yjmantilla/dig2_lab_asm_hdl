@@ -383,14 +383,14 @@ ACCUM		add r1 , r4 , #0 ; r1 <- 1 r4
 NEGATIVE	not r2 , r2
 		br INPUT_I		
 
-OVERFLOW	add r1 , r4 , r4
+OVERFLOW	add r1 , r4 , r4 ; check if it was possibly -32768
 		brz CASE
 OVERFLOW_2		lea r0 , MSG_OVERFLOW
 		MSG_OVERFLOW .stringz "\nOverflow"
 		jsr PUTSMSG
 		br INPUT_NO_SAVE
-CASE		add r1, r2, #0
-		brzp OVERFLOW_2
+CASE		add r1, r2, #0 ; check if negative flag is on
+		brzp OVERFLOW_2 ; if it is not negative, then it cant be -32768, is a valid overflow
 		br INPUT_I	
 INPUT_READY	ld r7, INPUT_R7
 		add r0 , r4 , #0
