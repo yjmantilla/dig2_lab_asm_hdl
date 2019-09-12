@@ -1,13 +1,13 @@
 .orig x0000
-MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 D.Sort\n5 A.Sort\n6 MUL 2 4 8?\nEnter op."
+MSG_MENU .stringz "\n\nMENU\n\n1 N again\n2 Highest\n3 Lowest\n4 Des.Sort\n5 Asc.Sort\n6 MUL 2 4 8?\nEnter op."
 MSG_ENTER_N	.stringz "\n\nFirst enter N"
 MSG_ENTER_NUM	.stringz "\n\nEnter nums"
 MSG_N_OK .stringz "\nN ok!"
-MSG_WHAT .stringz "\nError!"
+MSG_WHAT .stringz "\nWrong Input!"
 MSG_HIGH .stringz "\nHIGHEST:\n"
 MSG_LOW .stringz "\nLOWEST:\n"
 MSG_MUL .stringz "\nMULTS: \n"	
-
+MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
 
 BEGIN		br MAIN_MSG
 
@@ -57,8 +57,7 @@ HIGH_VAL	lea r0 MSG_HIGH
 		;set number of numbers to show
 		and r4 , r4 , #0
 		add r4 , r4 , #1 ; only one
-		lea r3 , DATA_STORE		; r3 <- address of data
-
+		lea r3 , DATA_STORE		; r3 <- address of data 
 		add r3 , r3 , #1
 		jsr SHOW_PREP
 		br MENU
@@ -129,8 +128,7 @@ SORT		st r0 , SORT_R0
 OUTERLOOP	add r4, r4, #-1 ; r4 counter outer loop
 		brnz SORTED
 		add r5, r4, #0	; r5 counter inner loop
-		;lea r3 , DATA_STORE
-		ld r3 , DATA_STORE_4
+		lea r3 , DATA_STORE
 		add r3 , r3 , #1 ; is the next because of the push
 INNERLOOP	LDR     R1, R3, #0
 		brn  NEG_1
@@ -221,8 +219,7 @@ MUL_248
 		add r6,r6,x0007
 		jsr MULTIPLE_PREP
 		br MENU
-
-DATA_STORE_4 .fill #0		
+		
 MULTIPLE_PREP	st r0 , M_R0		
 		st r1 , M_R1
 		st r3 , M_R3
@@ -230,9 +227,7 @@ MULTIPLE_PREP	st r0 , M_R0
 		st r5 , M_R5
 		st r6 , M_R6
 		st r7 , M_R7
-		;lea r5 DATA_STORE		; where is the data
-		ld r5 DATA_STORE_3
-		st r5 DATA_STORE_4
+		lea r5 DATA_STORE		; where is the data
 		add r5 , r5 , #1
 		and r3 , r3 , #0		; will be a counter
 		ld  r1 , N_STORE		
@@ -269,36 +264,29 @@ M_R3 .FILL 0
 M_R0 .FILL 0
 M_R4 .FILL 0
 M_R7 .FILL 0
-
-
-N_LOW		.fill #2 ;2
-N_HIGH		.fill #220 ;?
-MSG_ERROR_N     .stringz "\nError: 2 <= N <= ?"
+NOT_IN_RANGE	lea r0 , MSG_ERROR_N
+		jsr PUTSMSG
+		br MAIN
 
 NUM_DONE	lea r0 , MSG_NUM_OK
 		jsr PUTSMSG	
 		br MENU
 		MSG_NUM_OK .stringz "\nNums ok!"
-
-
-
+	
 ENTER_NUM	;let r3 be the counter
 		ld r3 , N_STORE
-		;lea r5 , DATA_STORE
-		ld r5 , DATA_STORE_2
-		st r5 , DATA_STORE_3
-		DATA_STORE_3 .FILL #0
+		lea r5 , DATA_STORE
 ENTER_NUM_LOOP	add r3 , r3 , #-1
 		brn NUM_DONE
 		jsr INPUT
 		add r1 , r4 , #0
 		jsr PUSH_R1_DATA
 		br ENTER_NUM_LOOP
+			
+DATA_STORE 	.blkw #31 ; because push pushes in the next
 
-NOT_IN_RANGE	lea r0 , MSG_ERROR_N
-		jsr PUTSMSG
-		br MAIN
-
+N_LOW		.fill #2 ;15
+N_HIGH		.fill #250 ;30
 CHECK_N		; check range for N
 		; assumes N in r4
 		st r7, 	CHECK_N_R7
@@ -389,20 +377,20 @@ NEGATIVE	not r2 , r2
 OVERFLOW	add r1 , r4 , r4
 		brz CASE
 OVERFLOW_2		lea r0 , MSG_OVERFLOW
-		MSG_OVERFLOW .stringz "\nOverflow!"
+		MSG_OVERFLOW .stringz "\nOverflow, try with a lower number."
 		jsr PUTSMSG
 		br INPUT_NO_SAVE
 CASE		add r1, r2, #0
 		brzp OVERFLOW_2
-		br INPUT_I	
+		br INPUT_I
+OVERFLOW_ASCII	lea r0 , MSG_A_OVERFLOW
+		MSG_A_OVERFLOW .stringz "\nOverflow for ASCII decimal representation,try with a lower number."
+		jsr PUTSMSG
+		br INPUT_NO_SAVE		
 INPUT_READY	ld r7, INPUT_R7
 		add r0 , r4 , #0
 		ret	; go home boy
 INPUT_R7 .FILL 0
-
-lea r5 , DATA_STORE
-st r5, DATA_STORE_2
-DATA_STORE_2 .fill #0
 YES_ENTER 	; if enter was first char, it will just assume thats a 0
 	
 		; check if we need to negate
@@ -429,41 +417,6 @@ PUSH_R1_DATA	;r5 used as stack register
 		ret
 POP_R1_DATA	ldr r1 , r5 , #0
 		add r5 , r5 ,#-1
-
-
-GETCHAR: LDI r0, KBSR ; Read the Keyboard Status Register (KBSR) to check if there is a new char available (x8000)
-brzp GETCHAR ; If KBSR != x8000, jump to GetChar
-LDI r0, KBDR ; Read the Keyboard Data Register (KBDR) to take the incoming character
-ret ; Subroutine return
-
-PUTCHAR: st r0, PCR0  ; Store R0 into memory to keep a copy of the incoming character
-
-PUTCHAR2: ldi r0, DSR ; Read the Display Status Register (DSR) to check if a character can be transmitted (x8000)
-brzp PUTCHAR2 ; If (DSR != x8000), jump to PutChar2
-ld r0 PCR0 ; Restore the character taken from the Keyboard to be sent to the display
-sti r0, DDR ; Write the Display Data Register (DDR) with the character taken from the Keyboard
-ret ; Subroutine return
-PCR0: .FILL 0
-
-PUTSMSG: st r0, PMR0 ; Store R0 into memory to keep a copy of the next char address
-ldr r0,r0,#0; Load the char to be sent
-brz PUTSMSGE ; Return if the char is NULL
-st r7, PMR7 ; Store R7 because is needed by RET instruction
-jsr PUTCHAR ; Send the char in R0
-ld r7, PMR7 ; Restore R7
-ld r0, PMR0 ; Restore the address of the char sent
-add r0,r0,#1 ; Compute the address of the next char
-br PUTSMSG ; Send the next char
-
-PUTSMSGE: ret ; Subroutine return
-
-PMR0 .FILL 0
-PMR7 .FILL 0
-KBSR: .FILL xFE00 ; Keyboard Status Register Address
-KBDR: .FILL xFE02 ; Keyboard Data Register Address
-DSR: .FILL xFE04 ; Display Status Register Address
-DDR: .FILL xFE06 ; Display Data Register Address
-
 
 ; Following subroutines are from https://github.com/jrcurtis/lc3/blob/master/tests/lab5.asm
 ;
@@ -676,6 +629,38 @@ DIV_R0	.FILL 0
 DIV_R2	.FILL 0
 DIV_R3	.FILL 0
 
-DATA_STORE 	.blkw #10 ; because push pushes in the next
+GETCHAR: LDI r0, KBSR ; Read the Keyboard Status Register (KBSR) to check if there is a new char available (x8000)
+brzp GETCHAR ; If KBSR != x8000, jump to GetChar
+LDI r0, KBDR ; Read the Keyboard Data Register (KBDR) to take the incoming character
+ret ; Subroutine return
+
+PUTCHAR: st r0, PCR0  ; Store R0 into memory to keep a copy of the incoming character
+
+PUTCHAR2: ldi r0, DSR ; Read the Display Status Register (DSR) to check if a character can be transmitted (x8000)
+brzp PUTCHAR2 ; If (DSR != x8000), jump to PutChar2
+ld r0 PCR0 ; Restore the character taken from the Keyboard to be sent to the display
+sti r0, DDR ; Write the Display Data Register (DDR) with the character taken from the Keyboard
+ret ; Subroutine return
+PCR0: .FILL 0
+
+PUTSMSG: st r0, PMR0 ; Store R0 into memory to keep a copy of the next char address
+ldr r0,r0,#0; Load the char to be sent
+brz PUTSMSGE ; Return if the char is NULL
+st r7, PMR7 ; Store R7 because is needed by RET instruction
+jsr PUTCHAR ; Send the char in R0
+ld r7, PMR7 ; Restore R7
+ld r0, PMR0 ; Restore the address of the char sent
+add r0,r0,#1 ; Compute the address of the next char
+br PUTSMSG ; Send the next char
+
+PUTSMSGE: ret ; Subroutine return
+
+PMR0 .FILL 0
+PMR7 .FILL 0
+KBSR: .FILL xFE00 ; Keyboard Status Register Address
+KBDR: .FILL xFE02 ; Keyboard Data Register Address
+DSR: .FILL xFE04 ; Display Status Register Address
+DDR: .FILL xFE06 ; Display Data Register Address
+
 
 .end
