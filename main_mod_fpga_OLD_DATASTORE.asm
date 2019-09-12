@@ -263,7 +263,7 @@ MUL_DONE	ld r0 , M_R0
 		ld r6 , M_R6
 		ld r7 , M_R7
 		ret
-MSG_SEP .stringz " "
+MSG_SEP .stringz ","
 M_R1 .FILL 0
 M_R5 .FILL 0
 M_R6 .FILL 0
@@ -295,7 +295,7 @@ DATA_STORE_4 .FILL x3000
 MSG_ERROR_N     .stringz "\nError: 15 <= N <= 30"
 MSG_NUM_OK .stringz "\nNums ok!"
 N_LOW		.fill #2 ;15
-N_HIGH		.fill #250 ;30
+N_HIGH		.fill #1000 ;30
 CHECK_N		; check range for N
 		; assumes N in r4
 		st r7, 	CHECK_N_R7
