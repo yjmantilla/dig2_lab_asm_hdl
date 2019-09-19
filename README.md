@@ -49,3 +49,5 @@ S to start processor
  Once
 the LC3 has started, the protocol is disabled and the serial communication
 system allows your LC3 program to interact with the serial terminal interface.
+
+delays of chars needed because of status register and sync logic, making a cross put get subroutine optimized for it may work
